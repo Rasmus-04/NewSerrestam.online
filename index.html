@@ -7,13 +7,19 @@
         <link href="css/style.css"
         rel="stylesheet" 
         type="text/css">
+
+        <link href="css/mobile_menu.css"
+        rel="stylesheet" 
+        type="text/css">
     </head>
 
     <body>
        <header>
-           <div class="test">
-                <img src="img/logo.jpeg" alt="RS" id="logo"></div>
-            <nav>
+            <nav class="main-nav">
+                <div class="logo_container">
+                    <img src="img/logo.jpeg" alt="RS" id="logo"></div>
+                 </div>
+
                 <ul>
                     <li><a href="#">Hem</a><div class="active"></div></li>
                     <li><a href="https://wp.serrestam.online">WordPress</a><div class="line"></div></li>
@@ -21,7 +27,23 @@
                     <li><a href="#">Recensioner</a><div class="line"></div></li>
                     <li><div id="navFiller"></div></li>
                 </ul>
+
+                <button class="hamburger">
+                    <div class="bar"></div>
+                </button>
             </nav>
+
+            <nav class="mobile-nav">
+                <a href="#">Hem</a>
+                <a href="https://wp.serrestam.online">WordPress</a>
+                <a href="#">Projekt</a>
+                <a href="#">Recensioner</a>
+            </nav>
+
+            <div class="headerImg">
+                <h1>Rasmus Serrestam</h1>
+                <h2>Landing Page</h2>
+            </div>
         </header>
 
         <main>
@@ -31,5 +53,8 @@
         <footer>
             
         </footer>
+
+
+        <script src="/js/main.js"></script>
     </body>
 </html>
