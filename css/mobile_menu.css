@@ -37,7 +37,7 @@
 .mobile-nav{
     display: block;
     position: fixed;
-    top: 10vh;
+    top: max(10vh, 80px);
     left: 100%;
     width: 100%;
     min-height: 100vh;
