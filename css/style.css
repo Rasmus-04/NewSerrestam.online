@@ -1,0 +1,84 @@
+html{
+    background-color: white;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+header{
+    background-color: white;
+    width: 100%;
+    height: 10vh;
+}
+
+nav{
+    height: 100%;
+}
+
+ul{
+    height: 100%;
+    float: right;
+    margin: 0;
+    padding: 0;
+    display: table;
+    list-style: none;
+}
+
+li{
+    display: table-cell;
+    vertical-align: middle;
+}
+
+li a{
+    margin-right: 30px;
+    text-decoration: none;
+    font-size: 18px;
+    color: black;
+    transition: color 300ms ease-in-out;
+}
+
+main{
+    background: black;
+    width: 100%;
+    height: 100vh;
+}
+
+li a:hover{
+    color: rgb(75, 174, 243);
+}
+
+.active{
+    background: rgb(75, 174, 243);
+    width: calc(100% - 30px);
+    height: 2px;
+}
+
+#navFiller{
+    width: 70px;
+}
+
+.line{
+    opacity: 0;
+    width: calc(100% - 30px);
+    height: 2px;
+    background: rgb(75, 174, 243);
+    transition: opacity 300ms ease-in-out;
+}
+
+li a:hover + .line{
+    opacity: 1;
+}
+
+#logo{
+    margin: auto;
+    width: 15%;
+}
+
+.test {
+    float: left;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
