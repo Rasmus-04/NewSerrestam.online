@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+
+.marker_font{
+    font-family: 'Permanent Marker', cursive;
+}
+
+body{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    
+    background: rgb(9,54,121);
+    background: linear-gradient(180deg, rgba(9,54,121,1) 0%, rgba(0,212,255,1) 100%);
+}
+
+header{
+    width: 100%;
+    height: fit-content;
+    padding-bottom: 10px;
+    background-color: black;
+    position: fixed;
+    top: 0;
+}
+
+h1{
+    float: left;
+    color: white;
+    margin: 0;
+    font-size: 2.8em;
+    padding-top: 2.1vh;
+    margin-left: 1.5vw;
+    width: 100%;
+}
+
+nav{
+    height: 100%;
+    background: black;   
+}
+
+nav ul{
+    display: flex;
+    margin-top: 2.5vh;
+    margin: 0;
+    padding-left: 0.5vw;
+}
+
+nav ul li{
+    padding: 5px 13px;
+    list-style-type: none;
+    width: fit-content;
+    margin-left: 5px;
+}
+
+nav ul li:hover{
+    border-radius: 5px;
+}
+
+nav ul li a{
+    color: rgb(199, 199, 199);
+}
+
+nav ul li a:hover{
+    color: rgb(255, 255, 255);
+}
+
+nav ul li a{
+    text-decoration: none;
+    font-size: 1.6em;
+}
+
+hr{
+    border-color: rgb(255, 255, 255);
+}
+
+footer{
+    width: 100%; 
+    padding: 5px 0;
+    height: fit-content;
+    background: black;
+    color: white;
+}
+
+#Filler{
+    width: 100%;
+    height: 20vh;
+}
+
+main{
+    min-height: calc(100vh - 19.8vh - 50px);
+    width: 60%;
+    margin: auto;
+}
+
+p{
+    color: rgb(255, 255, 255);
+    text-align: center;
+    font-size: 1.2em;
+    margin: 0;
+    padding: 20px 20px;
+}
+
+h2{
+    text-align: center;
+    color: rgb(255, 255, 255);
+    font-size: 2em;
+}
+
+section{
+    background: rgba(9,54,121, 20%);
+    margin-top: 3vh;
+    margin-bottom: 3vh;
+    padding-bottom: 10vh;
+    min-width: fit-content;
+    padding: 0 5px;
+}
+
+section img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: 3px solid black;
+    width: 50%;
+}
+
+footer p{
+    padding: 0;
+}
+
+footer a{
+    text-decoration: none;
+    color: rgb(0, 170, 170);
+}
+
+footer a:hover{
+    color: rgb(0, 109, 143);
+}
+
+h3{
+    font-family: 'Permanent Marker', cursive;
+    text-align: center;
+    margin: 0;
+    padding-top: 15px;
+    font-size: 2.2em;
+    color: rgb(163, 255, 179);
+}
+
+
+@media screen and (max-width: 500px){
+    #Filler{
+        height: 25vh;
+    }
+}

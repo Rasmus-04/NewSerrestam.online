@@ -1,0 +1,224 @@
+@import url(https://fonts.googleapis.com/css?family=Oswald|Open+Sans:400,300);
+
+:root{
+    --animation-time: 3s;
+}
+
+body{
+    background: white;
+    font-family: 'Open Sans', sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+h2{
+    font-weight: 100;
+    font-size: 38px;
+    color: #a508d4;
+}
+
+h3{
+    background: #a508d4;
+    padding: 10px;
+    color: white;
+    text-transform: uppercase;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 1px;
+    margin: 0;
+    margin-top: -5px;
+}
+
+.fotter_box h3{
+    background: none;
+    padding: 0;
+    padding-bottom: 10px;
+}
+
+.resmal_info{
+    font-size: 0.9em;
+    line-height: 1.6em;
+}
+
+/* layout struktur*/
+.wrapper{
+    width: 90%;
+    min-width: 1010px;
+    max-width: 960px;
+    min-height: 600px;
+    background: white;
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
+header{
+    height: 150px;
+}
+
+.logo{
+    width: 40%;
+    float: left;
+}
+
+.logo img{
+    width: 100px;
+}
+
+nav.meny{
+    width: 60%;
+    float: right;
+    margin-top: 45px;
+}
+
+.imagesbar{
+    background-image: url(../bilder/himmel.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 100%;
+    height: 100%;
+}
+
+.flygplan{
+    width: 18%;
+    margin-top: 120px;
+    padding-bottom: 105px;
+    margin-left: 120px;
+
+    animation: fly_flip var(--animation-time) linear infinite;
+}
+
+.resmal{
+    width: 30%;
+    float: left;
+    margin-right: 1%;
+}
+
+.resmal img{
+    width: 100%;
+}
+
+footer{
+    background-image: url(../bilder/footer.gif);
+    width: 100%;
+    min-width: 1010px;
+    height: fit-content;
+    background-repeat: no-repeat;
+    background-color: #802082;
+    background-size: 100%;
+    padding-top: 160px;
+    float: left;
+}
+
+.inner_footer{
+    width: 960px;
+    height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.fotter_box{
+    width: 32%;
+    margin-left: 1%;
+    height: 300px;
+
+    float: left;
+    color: white;
+    font-size: 18px;
+}
+
+.fotter_box img{
+    margin-right: 10px;
+}
+
+nav ul{
+    list-style-type: none;
+    padding: 0px;
+    text-align: right;
+}
+
+nav li{
+    display: inline;
+    margin-left: 10px;
+}
+
+nav a{
+    font-family: 'Oswald', sans-serif;
+    text-decoration: none;
+    color: #505050;
+    font-size: 14px;
+    text-transform: uppercase;
+    background: white;
+    padding: 10px;
+    padding-bottom: 8px;
+    border-radius: 5px;
+}
+
+nav a:hover{
+    background: #a508d4;
+    color: white;
+}
+
+.fotter_box form input{
+    background: #9f46a0;
+    height: 30px;
+    margin-bottom: 10px;
+    color:white;
+    border: none;
+}
+
+::placeholder{
+    color: white;
+}
+
+#submit{
+    width: 25%;
+    height: 2.5em;
+    text-transform: uppercase;
+    font-size: 0.8em;
+    margin-left: 23.5%;
+}
+
+#submit:hover{
+    background: #6f1370;
+}
+
+.maps{
+    float: left;
+}
+
+@keyframes fly_flip {
+    0%{
+        transform: translateX(0);
+    }
+
+    40%{
+        transform: translateX(300%);
+    }
+
+    50%{
+        transform: translateX(300%) rotatey(180deg);
+    }
+
+    100%{
+        transform: translateX(300%);
+        transform: translateX(0);
+    }
+}
+
+@keyframes fly {
+    0%{
+        transform: translateX(0);
+    }
+
+    40%{
+        transform: translateX(300%);
+    }
+
+    50%{
+        transform: translateX(300%) rotatey(180deg);
+    }
+
+    90%{
+        transform: translateX(0) rotatey(180deg);
+    }
+}

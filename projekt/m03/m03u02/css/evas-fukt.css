@@ -1,0 +1,61 @@
+body{
+    margin: 0;
+}
+
+.evas-body{
+    background: #ebebeb;
+    width: 800px;
+    height: fit-content;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10vh;
+
+    border-width: 1px;
+    border-style: solid;
+    border-color: #7c7c7c;
+
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+h1{
+    color: green;
+    font-weight: 100;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 34px;
+    padding-top: 20px;
+}
+
+h3{
+    color: green;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+p{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 150%;
+}
+
+a{
+    color: red;
+}
+
+#listt{
+    float: none;
+    display: block;
+}
+
+#listt li{
+    display: block;
+}
+
+#listt li a{
+    color: red;
+}
+
+.floatbild{
+    float: right;
+    width: 170px;
+}

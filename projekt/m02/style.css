@@ -1,0 +1,41 @@
+aside{
+    float: right;
+    width: 17%;
+    margin-left: 1vw;
+    height: 82vh;
+    border-radius: 1vh;
+    background: linear-gradient(to bottom, rgb(138, 138, 141), rgba(138, 138, 141, 0.4));
+    margin-top: 2vh;
+}
+
+#viktiga-taggar{
+    background-color: aliceblue;
+    border: 4px rgb(102, 99, 99) solid;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+}
+
+#viktiga-taggar th{
+    background-color: green;
+}
+
+#test{
+    float: left;
+    width: fit-content;
+}
+
+#viktiga-taggar td{
+    border-bottom: 1px grey dashed;
+    border-left: 1px gray solid;
+}
+
+
+@media screen and (max-width: 1367px) {
+    aside{
+        margin: 0;
+        float: none;
+        width: 100%;
+        height: 100%;
+    }
+  }
