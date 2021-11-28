@@ -84,7 +84,7 @@ nav.meny{
     padding-bottom: 105px;
     margin-left: 120px;
 
-    animation: fly_flip var(--animation-time) linear infinite;
+    animation: fly var(--animation-time) linear infinite;
 }
 
 .resmal{
