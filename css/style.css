@@ -42,7 +42,7 @@ li a{
 
 main{
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 li a:hover{
@@ -217,6 +217,41 @@ aside h4 a{
 
 aside h4 a:hover{
     color: rgb(2, 32, 32);
+}
+
+#Landing-page{
+    width: 80%;
+    margin: 40px auto;
+    min-height: fit-content;
+}
+
+#Landing-page section{
+    width: 100%;
+    min-height: fit-content;
+    min-width: fit-content;
+    height: 37vh;
+    background: red;
+    padding: 10px;
+}
+
+#Landing-page section img{
+    width: 30%;
+    float: left;
+    margin-right: 30px;
+}
+
+#Landing-page section p{
+    float: none;
+}
+
+#Landing-page section h6{
+    float: none;
+    text-align: center;
+}
+
+#Landing-page section h4{
+    float: none;
+    text-align: center;
 }
 
 @media (max-width: 1280px) {
