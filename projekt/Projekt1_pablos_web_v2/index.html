@@ -6,6 +6,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
     <link rel="shortcut icon" href="#">
     <title>Pablos web</title>
     <link href="css/style.css"
@@ -14,33 +22,40 @@
 </head>
 
 <body>
-    <header>
-        <div class="container">
-        <h1 class="marker_font" id="header_title">Paolos Webbtjänst</h1>
-    
-        <nav>
-            <ul>
-                <li><a href="#">Hem</a><hr></li>
-                <li><a href="sites/tekniker.html">Tekniker</a></li>
-                <li><a href="sites/projekt.html">Projekt</a></li>
-                <li><a href="sites/om.html">Om</a></li>
-            </ul>
-        </nav>
-    </div>
-    </header>
-    <div id="Filler"></div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Paolos Webbtjänst</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Hem <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="sites/tekniker.html">Tekniker</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="sites/projekt.html">Projekt</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="sites/om.html">Om</a>
+              </li>
+          </ul>
+        </div>
+      </nav>
 
     <main>
-        <section>
-            <h2 class="marker_font">Paolos webbtjänst!</h2>
-            <p>Välkommen till Paolos webbtjänst. Jag har på kort tid lärt mig en mängd webbtekniker och är nu redo att hjälpa dig att få ett bra hem på nätet. Tveka inte att höra av er till mig så kan vi diskutera hur jag kan bygga rätt lösning för just dig eller ditt företag.</p>
-            <img src="img/poblo.jpeg" alt="Bild på Paolo">
-        </section>
+
+
     </main>
 
-    <footer>
-        <p><a href="sites/om.html">Kontakta oss här</a></p>
-        <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Paolos Webbtjänst All Rights Reserved</p>
+    <footer class="text-center text-lg-start bg-dark text-muted fixed-bottom">
+    <div class="text-center p-4 text-light" style="background-color: rgba(0, 0, 0, 0.05);">
+        Copyright &copy; <script>document.write(new Date().getFullYear())</script>: 
+      <a class="text-reset fw-bold" href="https://serrestam.online/">Rasmus serrestam</a>
+    </div>
     </footer>
+    
 </body>
 </html>
