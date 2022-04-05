@@ -9,3 +9,51 @@ body{
     background-repeat: no-repeat;
     background-size: cover;
 }
+main{
+    margin-bottom: 24px;
+}
+
+article{
+    margin-top: 5rem;
+    margin-left: 5rem;
+    margin-right: 5rem;
+}
+
+section{
+    background: rgba(9,54,121, 20%);
+    padding: 1rem 0.5rem;
+    margin-top: 1rem;
+}
+
+section img{
+    max-width: 100%;
+}
+
+p{
+    color: white;
+    font-size: 1.2rem;
+}
+
+h2{
+    color: white;
+}
+
+h1{
+    color: white;
+}
+
+.row{
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    article{
+        margin-top: 3rem;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+}
+
+#facebook{
+    color: blue;
+}
