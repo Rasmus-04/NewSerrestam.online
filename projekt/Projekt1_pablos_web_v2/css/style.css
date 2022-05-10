@@ -23,10 +23,12 @@ section{
     background: rgba(9,54,121, 20%);
     padding: 1rem 0.5rem;
     margin-top: 1rem;
+    border-radius: 5px;
 }
 
 section img{
     max-width: 100%;
+    border-radius: 5px;
 }
 
 p{
