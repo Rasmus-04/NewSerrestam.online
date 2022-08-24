@@ -85,8 +85,8 @@ li a:hover + .line{
 }
 
 .headerImg{
-    height: 60vh;
-    min-height: fit-content;
+    height: fit-content;
+    min-height: 60vh;
     background: black;
     background-image: url("../img/new_york_city.jpg");
     background-image: url("../img/singapore_city.jpg");
