@@ -1,0 +1,13 @@
+
+table{
+    border: 2px solid gray;
+    width: 80%;
+}
+
+td{
+    border: 2px solid gray;
+}
+
+td:first-child{
+    width: 15%;
+}

@@ -152,7 +152,7 @@ h2{
     min-width: fit-content;
     width: 60vw;
     min-height: fit-content;
-    height: 75vh;
+    height: 40vh;
 
     display: grid;
     grid-template-columns: repeat(3, 1fr);
