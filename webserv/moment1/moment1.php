@@ -15,6 +15,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
 
+    <style>
+        main{
+            margin-left: 1rem;
+        }
+    </style>
+
 </head>
 <body>
 
@@ -34,6 +40,8 @@
           </ul>
         </div>
       </nav>
+
+    <main>
     <?php
     include('functions.php');
 
@@ -56,5 +64,6 @@
     uppgift_table();
 
     ?>
+    </main>
 </body>
 </html>
