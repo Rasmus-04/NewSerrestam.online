@@ -11,3 +11,7 @@ td{
 td:first-child{
     width: 15%;
 }
+
+main{
+    margin-left: 1rem;
+}
