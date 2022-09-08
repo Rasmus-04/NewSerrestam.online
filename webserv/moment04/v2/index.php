@@ -1,9 +1,56 @@
 <?php
 session_start();
-if(isset($_SESSION["admin"])){
-  header("location: admin.php");
+
+if(isset($_COOKIE["users"])){
+  $_SESSION["users"] = $_COOKIE["users"];
+  $_SESSION["pasw"] = $_COOKIE["pasw"];
 }
 
+if(isset($_COOKIE["admin"])){
+  $_SESSION["admin"] = "true";
+}
+
+if(isset($_COOKIE["active_user"])){
+  $_SESSION["active_user"] = $_COOKIE["active_user"];
+}
+
+
+if(isset($_SESSION["admin"])){
+  header("location: admin.php");
+}elseif(isset($_SESSION["active_user"])){
+  header("location: userpage.php");
+}
+
+
+function login_error(){
+  if(isset($_GET["mess"])){
+      switch($_GET["mess"]){
+          case "fail":
+              echo "<p style='color:red;'>Fel användarnamn eller lösenord</p>";
+              break;
+          case "noinfo":
+              echo "<p style='color:red;'>Inga uppgifter har angets</p>";
+              break;
+          case "acsses denied":
+              echo "<p style='color:red;'>Du har ingen återkomst</p>";
+              break;
+      }
+  }
+}
+
+function reg_error(){
+  if(isset($_GET["mess"])){
+      switch($_GET["mess"]){
+          case "usertaken":
+            echo "<p style='color:red;'>Användarnamnet du har anget är redan taget</p>";
+            break;
+
+          case "userreg":
+            echo "<p style='color:green;'>Du har skapat en nya användare</p>";
+            break;
+      }
+  }
+}
 ?>
 
 <!DOCTYPE html>
@@ -43,14 +90,13 @@ if(isset($_SESSION["admin"])){
       padding: 0;
       margin-left: 0;
     }
+
     .item {
       flex: 0 0 auto;
-      width: 47%;
     }
 
-    #login input{
-        width: 20%;
-        min-width: 300px;
+    form{
+      width: 40%;
     }
   </style>
 </head>
@@ -77,35 +123,37 @@ if(isset($_SESSION["admin"])){
       </nav>
 
 <main>
-    <h2>Logga in</h2>
-
-    <?php
-    if(isset($_GET["mess"])){
-        switch($_GET["mess"]){
-            case "fail":
-                echo "<p>Fel användarnamn eller lösenord</p>";
-                break;
-            case "noinfo":
-                echo "<p>Inga uppgifter har angets</p>";
-                break;
-            case "acsses denied":
-                echo "<p>Du har ingen återkomst</p>";
-                break;
-        }
-    }
-    ?>
-
+  <div class="container">
     <form action="login.php" method="post" id="login">
-      <div class="container">
         <div class="item">
-          <input type="text" placeholder="Användarnamn" name="user" required>
+          <h2>Logga in</h2>
+          <?php
+            login_error()
+          ?>
+          <input type="text" placeholder="Användarnamn" name="user" required />
           <br>
-          <input type="password" placeholder="Lösenord" name="password" required>
+          <input type="password" placeholder="Lösenord" name="password" required />
           <br>
+          <label class="form-checkbox">
+              <input type="checkbox" name="keepLoggedIn"> Håll mig inloggad</label>
+          <input type="submit" name="action" value="login">
         </div>
-      </div>
-        <input type="submit" name="action" value="login">
     </form>
+
+    <form action="reg.php" method="post">
+        <div class="item">
+          <h2>Registrera</h2>
+          <?php
+            reg_error()
+          ?>
+          <input type="text" placeholder="Användarnamn" name="user" required />
+          <input type="password" name="password" id="password" placeholder="Password" required />
+          <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password" required />
+          <input type="submit" name="action" value="login">
+        </div>
+    </form>
+  </div>
 </main>
+<script src="main.js"></script>
 </body>
 </html>
