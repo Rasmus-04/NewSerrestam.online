@@ -1,3 +1,23 @@
+<?php
+session_start();
+if(isset($_GET["action"])){
+  switch($_GET["action"]){
+    case "Registrera":
+      $_SESSION["name"] = $_GET["name"];
+      setcookie('name', $_GET["name"]);
+      break;
+
+    case "kill_session":
+      session_unset();
+      session_destroy();
+      header("location: ?");
+      break;
+  }
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,11 +78,11 @@
             <li class="nav-item">
               <a class="nav-link" href="../../webserv.html">Gå tillbaka</a>
             </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="#">m03u01</a>
-            </li>
             <li class="nav-item">
-              <a class="nav-link" href="../m03u02/m03u02.php">m03u02</a>
+              <a class="nav-link" href="../m03u01/m03u01.php">m03u01</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="#">m03u02</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="../m03u03/m03u03.php">m03u03</a>
@@ -75,36 +95,27 @@
       </nav>
 
 <main>
-  <form action="output.php" method="post">
+  <form action="?" method="get">
   
   <div class="container">
     <p class="item"><label for="Förnamn">Förnamn</label>
     <input id="Förnamn" type="text" name="name" required placeholder="Ange ditt Förnamn"></p>
-
-    <p class="item"><label for="efternamn">Efternamn</label>
-    <input id="efternamn" type="text" name="efternamn" required placeholder="Ange ditt efternamn"></p>
   </div>
 
-  <div class="container">
-    <p class="item"><label for="password">Lösenord</label>
-    <input id="password" type="password" name="password" required></p>
 
-    <p class="item"><label for="birthday">Födelsedag</label>
-    <input id="birthday" type="date" name="birthday" required></p>
-  </div>
-
-  <fieldset class="container">
-    <legend>Kön</legend>
-    <p class="item"><label for="man"><input id="man" name="gender" value="man" type="radio" checked>Man</label></p>
-    
-    <p class="item"><label for="kvinna"><input id="kvinna" name="gender" value="kvinna" type="radio">Kvinna</label></p>
-  </fieldset>
-
-  <p><label><input type="checkbox" name="villkor" required>     Jag godkänner användarvillkoren</label></p>
-
-  <p><input type="submit" name="submit" value="Registrera">
-  <input type="reset" name="reset" value="reset"></p>
+  <p><input type="submit" name="action" value="Registrera"></p>
   </form>
+
+  <?php
+  if(isset($_SESSION['name'])){
+    echo "<h3>Ditt namn är ".$_SESSION["name"]."</h3>";
+  }else{
+    echo "<h3>Du har inget namn</h3>";
+  }
+  ?>
+
+<a href="?action=kill_session">Döda sessionen</a><br />
+<a href="?">Ladda om sida utan GET-anrop</a>
   </main>
 </body>
 </html>
