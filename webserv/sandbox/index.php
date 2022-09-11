@@ -1,18 +1,15 @@
 <?php
 session_start();
+$_SESSION["TEST"] = array("hej", "vab", "daw");
+
+setcookie("hello", json_encode($_SESSION["TEST"]));
 
 
-if(isset($_GET["action"])){
-    switch($_GET["action"]){
-        case "reg":
-            $_SESSION["user"] = "RASMUS";
-            break;
-        case "reset":
-            session_unset();
-            session_destroy();
-            header("location: ?");
-            break;
-    }
+$data = json_decode($_COOKIE['hello'], true);
+
+
+foreach($data as $d){
+    echo "<p>".$d."</p>";
 }
 
 ?>
@@ -27,17 +24,10 @@ if(isset($_GET["action"])){
 </head>
 <body>
 
-    <a href="?action=reg">Register</a>
-    <a href="?action=reset">Reset</a>
-    <a href="very_important_page_where_you_have_to_be_logged_in.php">Login</a>
-    <?php
-    if(isset($_GET["mess"])){
-        echo "<h1>".$_GET["mess"]."</h1>";
-    }
-    ?>
 
-    <pre>
-  <?php
+
+<pre>
+<?php
   print_r(get_defined_vars());
  ?>
 </pre>

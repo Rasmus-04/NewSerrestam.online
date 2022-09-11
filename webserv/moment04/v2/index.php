@@ -1,26 +1,11 @@
 <?php
 session_start();
 
-if(isset($_COOKIE["users"])){
-  $_SESSION["users"] = $_COOKIE["users"];
-  $_SESSION["pasw"] = $_COOKIE["pasw"];
-}
-
-if(isset($_COOKIE["admin"])){
-  $_SESSION["admin"] = "true";
-}
-
-if(isset($_COOKIE["active_user"])){
-  $_SESSION["active_user"] = $_COOKIE["active_user"];
-}
-
-
 if(isset($_SESSION["admin"])){
   header("location: admin.php");
 }elseif(isset($_SESSION["active_user"])){
   header("location: userpage.php");
 }
-
 
 function login_error(){
   if(isset($_GET["mess"])){
