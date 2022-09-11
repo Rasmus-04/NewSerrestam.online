@@ -14,13 +14,6 @@
     }
 
     if($run){
-
-    if(isset($_COOKIE["users"])){
-        $_SESSION["users"] = $_COOKIE["users"];
-        $_SESSION["pasw"][] = $$_COOKIE["pasw"];
-    }
-
-
     if(isset($_SESSION["users"])){
         foreach($_SESSION["users"] as $u){
             if($user == $u){
@@ -33,8 +26,7 @@
         }else{
             $_SESSION["users"][] = $user;
             $_SESSION["pasw"][] = $pasw;
-            $_COOKIE["users"][] = $user;
-            $_COOKIE["pasw"][] = $pasw;
+            
             header("location: index.php?mess=userreg");
         } 
 
@@ -42,14 +34,8 @@
         $_SESSION["users"] = array();
         $_SESSION["pasw"] = array();
 
-        setcookie('users', array());
-        setcookie('pasw', array());
-
         $_SESSION["users"][] = $user;
         $_SESSION["pasw"][] = $pasw;
-
-        $_COOKIE["users"][] = $user;
-        $_COOKIE["pasw"][] = $pasw;
 
         header("location: index.php?mess=userreg");
     }}

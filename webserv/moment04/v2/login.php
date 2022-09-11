@@ -21,10 +21,6 @@
                 if(!$user_exsist){
                     header("location: index.php?mess=fail");
                 }else{
-                    if(isset($_POST["keepLoggedIn"])){
-                        setcookie('active_user', $user);
-                    }
-
                     header("location: userpage.php");
                 }
             }else{
@@ -37,10 +33,6 @@
 
     if(isset($_POST["action"])){
         if($user == "admin" and $pasw == "qwerty"){
-            if(isset($_POST["keepLoggedIn"])){
-                setcookie('admin', "true");
-            }
-
             $_SESSION["admin"] = "true";
             header('location: admin.php');
         }else{
