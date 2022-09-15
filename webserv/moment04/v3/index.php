@@ -3,6 +3,7 @@ include("functions.php");
 
 if(isset($_COOKIE["activeuser"])){
   $_SESSION["active_user"] = $_COOKIE["activeuser"];
+  setcookie('activeuser', $_SESSION["active_user"], time()+86400);
 }
 
 

@@ -7,7 +7,7 @@ $pasw = $_POST["password"];
 if($name == "admin" && $pasw == "qwerty"){
     $_SESSION["active_user"] = "admin";
     if(isset($_POST["keepLoggedIn"])){
-        setcookie('activeuser', $name, time()+69000);
+        setcookie('activeuser', $name, time()+86400);
     }
     header("location: admin.php");
 }else{
@@ -17,7 +17,7 @@ if($name == "admin" && $pasw == "qwerty"){
             $_SESSION["active_user"] = $name;
             $correct_login = true;
             if(isset($_POST["keepLoggedIn"])){
-                setcookie('activeuser', $name, time()+69000);
+                setcookie('activeuser', $name, time()+86400);
             }
             break;
         }
