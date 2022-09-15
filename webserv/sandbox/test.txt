@@ -1,3 +1,0 @@
-Programmering01 | Vi lär oss grunderna i programmering
-Webbutveckling01 | Vi lär oss skapa webbsidor
-Webbserverprogrammering01 | Vi lär oss programmera dynamiska webbsidor

@@ -1,39 +1,32 @@
 <?php
-session_start();
+include("functions.php");
 
-if(isset($_SESSION["admin"])){
-  header("location: admin.php");
-}elseif(isset($_SESSION["active_user"])){
-  header("location: userpage.php");
+if(isset($_COOKIE["activeuser"])){
+  $_SESSION["active_user"] = $_COOKIE["activeuser"];
 }
 
-function login_error(){
-  if(isset($_GET["mess"])){
-      switch($_GET["mess"]){
-          case "fail":
-              echo "<p style='color:red;'>Fel användarnamn eller lösenord</p>";
-              break;
-          case "noinfo":
-              echo "<p style='color:red;'>Inga uppgifter har angets</p>";
-              break;
-          case "acsses denied":
-              echo "<p style='color:red;'>Du har ingen återkomst</p>";
-              break;
-      }
+
+if(!isset($_SESSION["users"])){
+  get_users();
+}
+
+if(isset($_SESSION["active_user"])){
+  switch($_SESSION["active_user"]){
+    case "admin":
+      header("location: admin.php");
+      break;
+    default:
+      header("location: userpage.php");
   }
 }
 
-function reg_error(){
-  if(isset($_GET["mess"])){
-      switch($_GET["mess"]){
-          case "usertaken":
-            echo "<p style='color:red;'>Användarnamnet du har anget är redan taget</p>";
-            break;
-
-          case "userreg":
-            echo "<p style='color:green;'>Du har skapat en nya användare</p>";
-            break;
-      }
+if(isset($_GET["action"])){
+  switch($_GET["action"]){
+    case "clearsession":
+      session_unset();
+      session_destroy();
+      delete_users();
+      break;
   }
 }
 ?>
@@ -52,11 +45,10 @@ function reg_error(){
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-    <span class="pln">
-  </span><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic"><span class="pln">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
 
-  </span><link rel="stylesheet" href="../../css/milligram.css"><span class="pln">
-  </span>
+  <link rel="stylesheet" href="../../css/milligram.css">
+
 
   <style>
     main{
@@ -100,11 +92,11 @@ function reg_error(){
             <li class="nav-item">
               <a class="nav-link" href="../v1/index.php">Version 01</a>
             </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Version 02</a>
-            </li>
             <li class="nav-item">
-              <a class="nav-link" href="../v3/index.php">Version 03</a>
+              <a class="nav-link" href="../v2/index.php">Version 02</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Version 03</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="source.php">CSource</a>
@@ -113,30 +105,33 @@ function reg_error(){
         </div>
       </nav>
 
-
 <main>
   <div class="container">
     <form action="login.php" method="post" id="login">
         <div class="item">
           <h2>Logga in</h2>
           <?php
-            login_error()
+            if(isset($_GET["mess"])){
+              login_error($_GET["mess"]);
+            }
           ?>
           <input type="text" placeholder="Användarnamn" name="user" required />
           <br>
           <input type="password" placeholder="Lösenord" name="password" required />
           <br>
           <label class="form-checkbox">
-              <input type="checkbox" name="keepLoggedIn"> Håll mig inloggad</label>
+              <input type="checkbox" name="keepLoggedIn"> Håll mig inloggad (Använder cookies!)</label>
           <input type="submit" name="action" value="login">
         </div>
     </form>
 
-    <form action="reg.php" method="post">
+    <form action="registration.php" method="post">
         <div class="item">
           <h2>Registrera</h2>
           <?php
-            reg_error()
+            if(isset($_GET["mess"])){
+              reg_error($_GET["mess"]);
+            }
           ?>
           <input type="text" placeholder="Användarnamn" name="user" required />
           <input type="password" name="password" id="password" placeholder="Password" required />

@@ -1,0 +1,12 @@
+{
+    "users": [
+        {
+            "user": "test",
+            "pasw": "dwa"
+        },
+        {
+            "user": "admin",
+            "pasw": "qwerty"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "users": [
+      {
+        "name" : "test",
+        "pasw": "qwerty"
+      },
+      {
+        "name" : "admin",
+        "pasw": "hello"
+      },
+      {
+        "name" : "as",
+        "pasw": "dew"
+      }
+    ]
+  }

@@ -1,9 +1,5 @@
 <?php
-session_start();
-if(isset($_SESSION["admin"])){
-  header("location: admin.php");
-}
-
+include("checkacces.php");
 ?>
 
 <!DOCTYPE html>
@@ -20,12 +16,13 @@ if(isset($_SESSION["admin"])){
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
+
     <span class="pln">
   </span><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic"><span class="pln">
 
   </span><link rel="stylesheet" href="../../css/milligram.css"><span class="pln">
   </span>
-
+  
   <style>
     main{
       width: 80%;
@@ -33,7 +30,7 @@ if(isset($_SESSION["admin"])){
       margin-top: 4rem;
     }
 
-    .container {
+        .container {
       display: flex;
       flex-wrap: wrap;
       flex-direction: row;
@@ -43,6 +40,7 @@ if(isset($_SESSION["admin"])){
       padding: 0;
       margin-left: 0;
     }
+
     .item {
       flex: 0 0 auto;
       width: 47%;
@@ -54,10 +52,10 @@ if(isset($_SESSION["admin"])){
     }
   </style>
 </head>
-
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Rasmus Serrestam - Moment 04 - inloggningsapplikationen</a>
+        <a class="navbar-brand" href="#">Rasmus Serrestam - Moment 04</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -67,13 +65,7 @@ if(isset($_SESSION["admin"])){
               <a class="nav-link" href="../../webserv.html">Gå tillbaka</a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="#">Version 01</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../v2/index.php">Version 02</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../v3/index.php">Version 03</a>
+              <a class="nav-link" href="#">inloggningsapplikationen</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="source.php">CSource</a>
@@ -83,35 +75,17 @@ if(isset($_SESSION["admin"])){
       </nav>
 
 <main>
-    <h2>Logga in</h2>
+    <h2>Du är inloggad som Admin</h2>
+    <a href="logout.php">Logga ut</a>
+    <br>
+    <a href="wipe.php">Logga ut och ta bort alla användare</a>
 
+    <pre>
     <?php
-    if(isset($_GET["mess"])){
-        switch($_GET["mess"]){
-            case "fail":
-                echo "<p>Fel användarnamn eller lösenord</p>";
-                break;
-            case "noinfo":
-                echo "<p>Inga uppgifter har angets</p>";
-                break;
-            case "acsses denied":
-                echo "<p>Du har ingen återkomst</p>";
-                break;
-        }
-    }
+    print_r(get_defined_vars());
+    #print_r($_SESSION);
     ?>
-
-    <form action="login.php" method="post" id="login">
-      <div class="container">
-        <div class="item">
-          <input type="text" placeholder="Användarnamn" name="user" required>
-          <br>
-          <input type="password" placeholder="Lösenord" name="password" required>
-          <br>
-        </div>
-      </div>
-        <input type="submit" name="action" value="login">
-    </form>
+</pre>
 </main>
 </body>
 </html>
