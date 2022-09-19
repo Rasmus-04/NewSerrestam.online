@@ -141,6 +141,7 @@ if(isset($_GET["action"])){
         </div>
     </form>
   </div>
+  <p>Admin login: user: admin; password: qwerty</p>
 </main>
 <script src="main.js"></script>
 </body>

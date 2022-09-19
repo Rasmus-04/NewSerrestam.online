@@ -1,6 +1,12 @@
 <?php 
 session_start();
 
+function checkAccess(){
+    if(!isset($_SESSION["active_user"])){
+        header("location: index.php?mess=acsses denied");
+    }
+}
+
 function get_users(){
     $file_in = "users.json";
     $users = json_decode(file_get_contents($file_in), true);
@@ -53,6 +59,29 @@ function reg_error($mess){
         case "regsuccses":
             echo "<p style='color:green;'>Du har skapat en nya användare</p>";
             break;
+    }
+}
+
+function pswChangeMess($mess){
+    switch($mess){
+        case "sucsess":
+            echo "<p style='color:green;'>Ditt lösenord har uppdaterats!</p>";
+            break;
+
+        case "fail":
+            echo "<p style='color:red;'>Fel Lössenord!</p>";
+            break;
+    }
+}
+
+function removeUser($usr){
+    foreach($_SESSION["users"] as $index => $user){
+        if($user["user"] == $usr){
+            unset($_SESSION["users"][$index]);
+            unset($_SESSION["pasw"][$index]);
+            update_users();
+            break;
+        }
     }
 }
 ?>

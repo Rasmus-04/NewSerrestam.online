@@ -11,3 +11,14 @@ function validatePassword(){
 
 password.onchange = validatePassword;
 confirm_password.onkeyup = validatePassword;
+
+
+function check_selected() {
+  var selector = document.getElementById('delUser');
+  var value = selector[selector.selectedIndex].value;
+  if (value.length > 0) {
+    document.getElementById('button_select').disabled = false;
+  } else {
+    document.getElementById('button_select').disabled = true;
+  }
+}

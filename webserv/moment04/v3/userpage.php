@@ -1,5 +1,6 @@
 <?php
-include("checkacces.php");
+include("functions.php");
+checkAccess();
 ?>
 
 <!DOCTYPE html>
@@ -79,9 +80,25 @@ include("checkacces.php");
     echo $_SESSION["active_user"];
     ?>
     </h2>
+
+    <form action="changepassword.php" method="POST">
+      <h4>Byt Lösenord</h4>
+      <?php
+      if(isset($_GET["mess"])){
+        pswChangeMess($_GET["mess"]);
+      }
+      ?>
+      <input type="Password" placeholder="Current Password" name="oldpsw" required>
+
+      <input type="password" name="password" id="password" placeholder="New password" required />
+      <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password" required />
+
+      <input type="submit" name="action" value="Change Password">
+    </form>
     
     <a href="logout.php">Logga ut</a>
     <a href="deleteaccount.php">Radera konto</a>
 </main>
+<script src="main.js"></script>
 </body>
 </html>

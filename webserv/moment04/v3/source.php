@@ -221,10 +221,10 @@ class CSource
 
         $pattern = [
             '/(\'|")(DB_PASSWORD|DB_USER)(.+)/',
-            '/\$(password|passwd|pwd|pw|user|username)(\s*=\s*)(\'|")(.+)/i',
+            '/\$(password|passwd|pwd|pw|user|username|admin_pass)(\s*=\s*)(\'|")(.+)/i',
             //'/(\'|")(password|passwd|pwd|pw)(\'|")\s*=>\s*(.+)/i',
-            '/(\'|")(password|passwd|pwd|pw|user|username)(\'|")(\s*=>\s*)(\'|")(.+)([\'|"].*)/i',
-            '/(\[[\'|"])(password|passwd|pwd|pw|user|username)([\'|"]\])(\s*=\s*)(\'|")(.+)([\'|"].*)/i',
+            '/(\'|")(password|passwd|pwd|pw|user|username|admin_pass)(\'|")(\s*=>\s*)(\'|")(.+)([\'|"].*)/i',
+            '/(\[[\'|"])(password|passwd|pwd|pw|user|username|admin_pass)([\'|"]\])(\s*=\s*)(\'|")(.+)([\'|"].*)/i',
         ];
 
 

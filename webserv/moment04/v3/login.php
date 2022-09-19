@@ -30,9 +30,5 @@ if($name == "admin" && $pasw == $admin_pass){
     }else{
         header("location: userpage.php");
     }
-
-
-    
 }
-
 ?>

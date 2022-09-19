@@ -1,5 +1,9 @@
 <?php
-include("checkacces.php");
+include("functions.php");
+checkAccess();
+if(isset($_POST["delUser"])){
+  removeUser($_POST["delUser"]);
+}
 ?>
 
 <!DOCTYPE html>
@@ -73,12 +77,31 @@ include("checkacces.php");
           </ul>
         </div>
       </nav>
-
 <main>
     <h2>Du är inloggad som Admin</h2>
+
+    <form method='post' action='?'>
+      <?php
+        if(isset($_POST["delUser"])){
+          echo "<p style='color:green;'>User: {$_POST["delUser"]} has been removed</p>";
+        }
+      ?>
+
+      <label for="delUser">Delete specific user</label>
+      <select name='delUser' id="delUser" onchange="check_selected()">
+      <option value="">Välj en användare...</option>
+        <?php
+          foreach($_SESSION["users"] as $u){
+            echo "<option value='{$u["user"]}'>{$u["user"]}</option>";
+          }
+        ?>
+      </select>
+      <input type="submit" value="Delete user" id="button_select" onclick="return confirm('Are you sure you want to delate this user?')" disabled>
+    </form>
+
     <a href="logout.php">Logga ut</a>
     <br>
-    <a href="wipe.php">Logga ut och ta bort alla användare</a>
+    <a href="wipe.php" onclick="return confirm('Are you sure you want to delate all users?')">Logga ut och ta bort alla användare</a>
 
     <pre>
     <?php
@@ -87,5 +110,6 @@ include("checkacces.php");
     ?>
 </pre>
 </main>
+<script src="main.js"></script>
 </body>
 </html>
