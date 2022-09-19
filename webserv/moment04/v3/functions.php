@@ -23,10 +23,11 @@ function delete_users(){
 
 function update_users(){
     $t = array("users" => array());
-    $t["users"] = $_SESSION["users"];
+    foreach($_SESSION["users"] as $u){
+        $t["users"][] = $u;
+    }
     $file_out = "users.json";
     $file = fopen($file_out, "w");
-    
 
     fwrite($file, json_encode($t, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     fclose($file);

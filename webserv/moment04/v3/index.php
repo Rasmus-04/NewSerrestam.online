@@ -137,7 +137,7 @@ if(isset($_GET["action"])){
           <input type="text" placeholder="Användarnamn" name="user" required />
           <input type="password" name="password" id="password" placeholder="Password" required />
           <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password" required />
-          <input type="submit" name="action" value="login">
+          <input type="submit" name="action" value="registrera">
         </div>
     </form>
   </div>

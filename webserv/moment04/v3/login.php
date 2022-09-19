@@ -2,9 +2,11 @@
 session_start();
 
 $name = mb_strtolower(trim($_POST["user"]));
-$pasw = $_POST["password"];
+$pasw = sha1($_POST["password"]);
 
-if($name == "admin" && $pasw == "qwerty"){
+$admin_pass = sha1("qwerty");
+
+if($name == "admin" && $pasw == $admin_pass){
     $_SESSION["active_user"] = "admin";
     if(isset($_POST["keepLoggedIn"])){
         setcookie('activeuser', $name, time()+86400);

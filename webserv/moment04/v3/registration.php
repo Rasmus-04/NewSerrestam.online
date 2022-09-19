@@ -2,7 +2,7 @@
 include("functions.php");
 
 $name = mb_strtolower(trim($_POST["user"]));
-$pasw = $_POST["password"];
+$pasw = sha1($_POST["password"]);
 
 if($name == "admin"){
     header("location: index.php?mess=usertaken");
