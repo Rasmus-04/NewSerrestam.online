@@ -93,7 +93,7 @@ if(isset($_POST["action"])){
               <a class="nav-link" href="#">Version 01</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Version 02</a>
+              <a class="nav-link" href="../v2/index.php">Version 02</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Version 03</a>
