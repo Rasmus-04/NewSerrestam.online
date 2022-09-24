@@ -6,6 +6,10 @@ $pasw = sha1($_POST["password"]);
 
 if($name == "admin"){
     header("location: index.php?mess=usertaken");
+}elseif(str_contains($name, " ")){
+    header("location: index.php?mess=nospaces");
+}elseif(mb_strlen($name) < 3 || mb_strlen($name) > 9){
+    header("location: index.php?mess=lengtherror");
 }else{
     $user_taken = false;
     foreach($_SESSION["users"] as $user){

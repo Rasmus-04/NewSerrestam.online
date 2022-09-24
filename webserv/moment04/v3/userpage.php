@@ -97,7 +97,7 @@ checkAccess();
     </form>
     
     <a href="logout.php">Logga ut</a>
-    <a href="deleteaccount.php">Radera konto</a>
+    <a href="deleteaccount.php" onclick="return confirm('Are you sure you want to delate this user?')">Radera konto</a>
 </main>
 <script src="main.js"></script>
 </body>

@@ -20,16 +20,6 @@ if(isset($_SESSION["active_user"])){
       header("location: userpage.php");
   }
 }
-
-if(isset($_GET["action"])){
-  switch($_GET["action"]){
-    case "clearsession":
-      session_unset();
-      session_destroy();
-      delete_users();
-      break;
-  }
-}
 ?>
 
 <!DOCTYPE html>
@@ -134,9 +124,9 @@ if(isset($_GET["action"])){
               reg_error($_GET["mess"]);
             }
           ?>
-          <input type="text" placeholder="Användarnamn" name="user" required />
-          <input type="password" name="password" id="password" placeholder="Password" required />
-          <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password" required />
+          <input type="text" placeholder="Användarnamn" name="user" maxlength="9" minlength="3" oninvalid="this.setCustomValidity('Du måste ange ett användarnamn')" oninput="this.setCustomValidity('')" required />
+          <input type="password" name="password" id="password" placeholder="Password" oninvalid="this.setCustomValidity('Du måste ange ett lösenord')" oninput="this.setCustomValidity('')" required />
+          <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password" oninvalid="this.setCustomValidity('Du måste ange ett lösenord')" oninput="this.setCustomValidity('')" required />
           <input type="submit" name="action" value="registrera">
         </div>
     </form>

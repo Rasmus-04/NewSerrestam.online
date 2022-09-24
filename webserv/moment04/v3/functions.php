@@ -59,6 +59,14 @@ function reg_error($mess){
         case "regsuccses":
             echo "<p style='color:green;'>Du har skapat en nya användare</p>";
             break;
+        
+        case "nospaces":
+            echo "<p style='color:red;'>Användarnamnet får inte innehålla mellanrum</p>";
+            break;
+        
+        case "lengtherror":
+            echo "<p style='color:red;'>Användarnamnet vara mellan 3 och 10 bokstäver</p>";
+            break;
     }
 }
 
