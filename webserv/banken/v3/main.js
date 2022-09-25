@@ -31,7 +31,7 @@ function checkSelectedMulti(){
 
   //var value3 = document.getElementById("summa").value;
   
-  if (value.length > 0 && value2.length > 0){
+  if (value.length > 0 && value2.length > 0 && value != value2){
     document.getElementById('transfer').disabled = false;
   } else {
     document.getElementById('transfer').disabled = true;
