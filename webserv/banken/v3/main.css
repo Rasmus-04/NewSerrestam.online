@@ -15,7 +15,7 @@ grid-row-gap: 10px;
 .container section{
     display: block;
     margin: 20px auto;
-    max-width: 100%;
+    width: 100%;
     height: fit-content;
     min-height: fit-content;
     padding: 10px;

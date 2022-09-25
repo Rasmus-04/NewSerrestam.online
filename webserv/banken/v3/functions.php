@@ -106,7 +106,28 @@ function bankMess(){
             case "wrongPasw":
                 echo "<h4 style='color: red; text-align: center;'>Du angav fel lösenord</h4>";
                 break;
-}
+            case "emtyAccount":
+                echo "<h4 style='color: red; text-align: center;'>Kontot måste vara tomt innan du tar bort det</h4>";
+                break;
+            case "accToAcc":
+                echo "<h4 style='color: red; text-align: center;'>Kan inte överföra till samma konto</h4>";
+                break;
+            case "notEnoughMoney":
+                echo "<h4 style='color: red; text-align: center;'>Inte tillräckligt mycket pengar på kontot</h4>";
+                break;
+            case "invalidAmmount":
+                echo "<h4 style='color: red; text-align: center;'>Ogiltiligt summa</h4>";
+                break;
+            case "transferSucces":
+                echo "<h4 style='color: green; text-align: center;'>Överförningen lyckades!</h4>";
+                break;
+            case "invalidUser":
+                echo "<h4 style='color: red; text-align: center;'>Användaren existerar inte</h4>";
+                break;
+            case "invalidAccount":
+                echo "<h4 style='color: red; text-align: center;'>Användaren har inget konto som heter det du angav</h4>";
+                break;
+        }
     }
 }
 
@@ -134,7 +155,7 @@ function validateAccess(){
 
 function logout(){
     unset($_SESSION["activeUser"]);
-      
+    unset($_SESSION["activeAccount"]);
     if(isset($_COOKIE["activeUser"])){
       setcookie('activeUser', "", time()-3600);
     }
@@ -161,28 +182,104 @@ function changePassword($oldPsw, $newPsw){
     }
 }
 
-function deposit($amount, $account="allkonto"){
+function validateAccountName($account){
+    $account = mb_strtolower($account);
+    if(mb_strlen($account) < 3 || mb_strlen($account) > 9){
+        return("lengthError");
+    }elseif(str_contains($account, " ")){
+        return("illegalCharacter");
+    }elseif(isset($_SESSION["users"][$_SESSION["activeUser"]]["accounts"][$account])){
+        return("acountExist");
+    }else{
+        return $account;
+    }
+}
+
+function createAccount($account){
+    $account = validateAccountName($account);
+    switch($account){
+        case "lengthError":
+            reload("bank.php", $account);
+            break;
+        case "illegalCharacter":
+            reload("bank.php", $account);
+            break;
+        case "acountExist":
+            reload("bank.php", $account);
+            break;
+        default:
+            #Skapar konto
+            $_SESSION["users"][$_SESSION["activeUser"]]["accounts"][$account] = array();
+            update_users();
+            reload("bank.php", "accountCreated");
+            break;
+    }
+}
+
+function accountCreationsError(){
+    if(isset($_GET["mess"]))
+    switch($_GET["mess"]){
+        case "lengthError":
+            echo "<p style='color: red;'>Konto namnet måste vara mellan 3 och 9 bokstäver</p>";
+            break;
+        case "illegalCharacter":
+            echo "<p style='color: red;'>Konto namnet får inte inehålla mellanslag</p>";
+            break;
+        case "acountExist":
+            echo "<p style='color: red;'>Konto namnet existerar redan</p>";
+            break;
+        case "accountCreated":
+            echo "<p style='color: green;'>Kontot har skapats!</p>";
+            break;
+    }
+}
+
+function deposit($amount, $account="allkonto", $redirect=true, $user=""){
+    if($user == ""){
+        $user=$_SESSION["activeUser"];
+    }
     if($amount < 0){
         reload("bank.php", "ivalidAmount");
     }
-    $_SESSION["users"][$_SESSION["activeUser"]]["accounts"][$account][] = array($amount, date("Y-m-d H:i:s"));
+    $_SESSION["users"][$user]["accounts"][$account][] = array($amount, date("Y-m-d H:i:s"));
     update_users();
-    reload("bank.php");
+    if($redirect){
+        reload("bank.php");
+    }
 }
 
-function withdrawal($amount, $account="allkonto"){
+function withdrawal($amount, $account="allkonto", $redirect=true){
     if($amount < 0){
         reload("bank.php", "ivalidAmount");
     }
     $_SESSION["users"][$_SESSION["activeUser"]]["accounts"][$account][] = array(-$amount, date("Y-m-d H:i:s"));
     update_users();
-    reload("bank.php");
+    if($redirect){
+        reload("bank.php");
+    }
+    
 }
 
 function deleteAccount(){
     unset($_SESSION["users"][$_SESSION["activeUser"]]);
+    unset($_SESSION["activeAccount"]);
     update_users();
     logout();
+}
+
+function removeAccount($account){
+    if($account == "allkonto"){
+        reload("bank.php");
+    }
+    if(intval(getBalance($account)) != 0){
+        reload("bank.php", "emtyAccount");
+    }
+    unset($_SESSION["users"][$_SESSION["activeUser"]]["accounts"][$account]);
+    if($_SESSION["activeAccount"] == $account){
+        unset($_SESSION["activeAccount"]);
+    }
+    update_users();
+    reload("bank.php");
 }
 
 function get_users(){
@@ -215,4 +312,37 @@ function getTransactionTable($account="allkonto"){
     return $output;
 }
 
+function transfer($fromAccount, $toAccount, $ammount){
+    if($fromAccount == $toAccount){
+        reload("bank.php", "accToAcc");
+    }elseif(getBalance($fromAccount) < $ammount){
+        reload("bank.php", "notEnoughMoney");
+    }elseif($ammount < 0){
+        reload("bank.php", "invalidAmmount");
+    }else{
+        withdrawal($ammount, $fromAccount, false);
+        deposit($ammount, $toAccount, false);
+        update_users();
+        reload("bank.php", "transferSucces");
+    }   
+}
+
+function transferBetweenUsers($fromAccount, $toAccount, $toUser, $ammount){
+    $toAccount = mb_strtolower(trim($toAccount));
+    $toUser = mb_strtolower(trim($toUser));
+    echo $toUser;
+    if(getBalance($fromAccount) < $ammount){
+        reload("bank.php", "notEnoughMoney");
+    }elseif($ammount < 0){
+        reload("bank.php", "invalidAmmount");
+    }elseif(!isset($_SESSION["users"][$toUser])){
+        reload("bank.php", "invalidUser");
+    }elseif(!isset($_SESSION["users"][$toUser]["accounts"][$toAccount])){
+        reload("bank.php", "invalidAccount");
+    }else{
+        withdrawal($ammount, $fromAccount, false);
+        deposit($ammount, $toAccount, false, $toUser);
+        reload("bank.php", "transferSucces");
+    }
+}
 ?>

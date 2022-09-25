@@ -64,7 +64,7 @@ if(isset($_GET["action"])){
               <a class="nav-link" href="#">Version 02</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Version 03</a>
+              <a class="nav-link" href="../v3/index.php">Version 03</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="source.php">CSource</a>
@@ -104,7 +104,7 @@ if(isset($_GET["action"])){
 
 
 
-  <a href="?action=killsession">Kill session</a>
+  <p>Döda sessionen om du har en från någon annan version eller annat projekt <a href="?action=killsession">Kill session</a></p>
 
     <pre>
     <?php

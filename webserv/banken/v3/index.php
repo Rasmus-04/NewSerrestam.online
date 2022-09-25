@@ -1,15 +1,25 @@
 <?php
 include("functions.php");
-validateAccess();
+
+if(!isset($_SESSION["users"])){
+    get_users();
+}
+
+if(isset($_COOKIE["activeUser"])){
+    setcookie("activeUser", $_COOKIE["activeUser"], time()+(3600*24));
+    $_SESSION["activeUser"] = $_COOKIE["activeUser"];
+}
+
+if(isset($_SESSION["activeUser"])){
+    reload("bank.php");
+}
 
 if(isset($_GET["action"])){
     switch($_GET["action"]){
-        case "Logga ut":
-            logout();
+        case "killsession":
+            clearSession();
+            header("location: index.php");
             break;
-        case "Radera konto":
-          deleteAccount();
-          break;
     }
 }
 ?>
@@ -20,7 +30,7 @@ if(isset($_GET["action"])){
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bank</title>
+  <title>Bank - login</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
@@ -50,11 +60,11 @@ if(isset($_GET["action"])){
             <li class="nav-item">
               <a class="nav-link" href="../v1/index.php">Version 01</a>
             </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Version 02</a>
-            </li>
             <li class="nav-item">
-              <a class="nav-link" href="../v3/index.php">Version 03</a>
+              <a class="nav-link" href="../v2/index.php">Version 02</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Version 03</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="source.php">CSource</a>
@@ -65,63 +75,44 @@ if(isset($_GET["action"])){
 
 <main>
     <h1>Sveriges mest säkraste bank</h1>
-    <h2>Du är inloggad som <?php echo ucfirst($_SESSION["activeUser"])?></h2>
-    <?php bankMess() ?>
-    <hr>
-    <article class="container">
+  <div class="container">
     <section>
-        <h3><b>Saldo</b></h3>
-        <p><?php echo getBalance()?> kr</p>
-        <h3><b>Insättning/uttag</b></h3>
-
-        <form action="bankmanager.php" method="POST">
-        <label for="belopp">Belopp:</label>
-        <input type="number" name="amount" min="1" required>
-
-        <label for="deposit"><input type="radio" id="deposit" name="action" value="deposit" checked> Insättning</label>
-        <label for="withdrawal"><input type="radio" id="withdrawal" name="action" value="withdrawal"> Uttag</label>
-        
-        <input type="submit" value="Utför">
-        
+        <form action="bankmanager.php" method="post">
+            <h2>Logga in</h2>
+            <?php loginMsg();?>
+            <input type="text" placeholder="Användarnamn" name="user" required />
+            <br>
+            <input type="password" placeholder="Lösenord" name="password" required />
+            <br>
+            <label class="form-checkbox">
+                <input type="checkbox" name="keepLoggedIn"> Håll mig inloggad (Använder cookies!)</label>
+            <input type="submit" name="action" value="login">
         </form>
     </section>
 
     <section>
-        <h3><b>Transaktioner</b></h3>
-        <div id="trasactionList">
-        <?php echo getTransactionTable()?>
-        </div>
+    <form action="bankmanager.php" method="post">
+          <h2>Registrera konto</h2>
+          <?php regMsg();?>
+          <input type="text" placeholder="Användarnamn" name="user" maxlength="9" minlength="3" oninvalid="this.setCustomValidity('Du måste ange ett användarnamn')" oninput="this.setCustomValidity('')" required />
+          <input type="password" name="password" id="password" placeholder="Lösenord" minlength="3" oninvalid="this.setCustomValidity('Du måste ange ett lösenord med minst 3 bokstäver')" oninput="this.setCustomValidity('')" required />
+          <input type="password" name="confirm_password" id="confirm_password" placeholder="Upprepa lösenord" oninvalid="this.setCustomValidity('Du måste upprepa ditt lösenord')" oninput="this.setCustomValidity('')" required />
+          <input type="submit" name="action" value="registrera">
+    </form>
     </section>
-    </article>
-    
-    <hr>
+  </div>
 
-    <article class="container">
-      <section>
-        <form action="?" method="GET">
-          <input type="submit" name="action" value="Logga ut">
-          <input type="submit" name="action" value="Radera konto" onclick="return confirm('Är du säker att du vill ta bort ditt konto?')">
-        </form>
-      </section>
 
-      <section>
-        <form action="bankmanager.php" method="POST" id="test">
-          <h4>Byt Lösenord</h4>
-          <input type="Password" placeholder="Current Password" name="oldpsw" required>
 
-          <input type="password" name="password" id="password" placeholder="New password" minlength="3" required />
-          <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password" required />
+  <p>Döda sessionen om du har en från någon annan version eller annat projekt <a href="?action=killsession">Kill session</a></p>
 
-          <input type="submit" name="action" value="Change Password">
-        </form>
-      </section>
-    </article>
 
     <pre>
     <?php
     print_r(get_defined_vars());
     ?>
     </pre>
+
 </main>
 <script src="main.js"></script>
 </body>
