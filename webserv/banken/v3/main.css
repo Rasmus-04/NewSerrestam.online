@@ -62,4 +62,8 @@ tr:nth-child(odd){
     .container section{
     min-width: 100%;
     }
+
+    main{
+        width: 100%;
+    }
 }

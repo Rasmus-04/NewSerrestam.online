@@ -223,7 +223,6 @@ if(isset($_GET["action"])){
             <input type="submit" value="Överför">
         </form>
       </section>
-    </article>
 
     <section>
         <form action="?" method="GET">

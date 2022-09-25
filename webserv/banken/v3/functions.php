@@ -251,6 +251,8 @@ function deposit($amount, $account="allkonto", $redirect=true, $user=""){
 function withdrawal($amount, $account="allkonto", $redirect=true){
     if($amount < 0){
         reload("bank.php", "ivalidAmount");
+    }elseif($amount > getBalance($account)){
+        reload("bank.php", "notEnoughMoney");
     }
     $_SESSION["users"][$_SESSION["activeUser"]]["accounts"][$account][] = array(-$amount, date("Y-m-d H:i:s"));
     update_users();
