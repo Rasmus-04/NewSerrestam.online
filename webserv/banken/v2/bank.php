@@ -57,6 +57,9 @@ if(isset($_GET["action"])){
               <a class="nav-link" href="../v3/index.php">Version 03</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="../v4/index.php">Version 04</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="source.php">CSource</a>
             </li>
           </ul>
@@ -116,12 +119,6 @@ if(isset($_GET["action"])){
         </form>
       </section>
     </article>
-
-    <pre>
-    <?php
-    print_r(get_defined_vars());
-    ?>
-    </pre>
 </main>
 <script src="main.js"></script>
 </body>

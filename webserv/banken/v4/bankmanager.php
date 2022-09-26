@@ -28,7 +28,7 @@ switch($_POST["action"]){
         transfer($_POST["fromKonto"], $_POST["toKonto"], $_POST["amount"]);
         break;
     case "transferBetweenUsers":
-        transferBetweenUsers($_POST["fromKonto"], $_POST["toUserAccount"], $_POST["toUser"], $_POST["amount"]);
+        transferBetweenUsers($_POST["fromKonto"], $_POST["accountNumber"], $_POST["amount"]);
         break;
 }
 }

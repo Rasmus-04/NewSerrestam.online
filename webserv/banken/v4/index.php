@@ -1,10 +1,6 @@
 <?php
 include("functions.php");
 
-if(!isset($_SESSION["users"])){
-    get_users();
-}
-
 if(isset($_COOKIE["activeUser"])){
     setcookie("activeUser", $_COOKIE["activeUser"], time()+(3600*24));
     $_SESSION["activeUser"] = $_COOKIE["activeUser"];
@@ -60,14 +56,14 @@ if(isset($_GET["action"])){
             <li class="nav-item">
               <a class="nav-link" href="../v1/index.php">Version 01</a>
             </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Version 02</a>
+            <li class="nav-item">
+              <a class="nav-link" href="../v2/index.php">Version 02</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="../v3/index.php">Version 03</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../v4/index.php">Version 04</a>
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Version 04</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="source.php">CSource</a>

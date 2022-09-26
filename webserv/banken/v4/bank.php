@@ -1,13 +1,16 @@
 <?php
 include("functions.php");
 validateAccess();
+$lista = getJsonList();
 
 if(!isset($_SESSION["activeAccount"])){
   $_SESSION["activeAccount"] = "allkonto";
 }
 
 if(isset($_GET["updateActiveAccount"])){
-  $_SESSION["activeAccount"] = $_GET["updateActiveAccount"];
+  if(isset($lista["users"][$_SESSION["activeUser"]]["accounts"][$_GET["updateActiveAccount"]])){
+    $_SESSION["activeAccount"] = $_GET["updateActiveAccount"];
+  }
   reload("bank.php");
 }
 
@@ -62,11 +65,11 @@ if(isset($_GET["action"])){
             <li class="nav-item">
               <a class="nav-link" href="../v2/index.php">Version 02</a>
             </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Version 03</a>
-            </li>
             <li class="nav-item">
-              <a class="nav-link" href="../v4/index.php">Version 04</a>
+              <a class="nav-link" href="../v3/index.php">Version 03</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Version 04</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="source.php">CSource</a>
@@ -88,12 +91,12 @@ if(isset($_GET["action"])){
             <h3>Välj konto</h3>
             <select name="" id="accountSelect" onchange="selectAccount()">
               <?php
-              foreach($_SESSION["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
+              foreach($lista["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
                 $name = ucfirst($index);
                 if($index == $_SESSION["activeAccount"]){
-                  echo "<option value='$index' selected>$name</option>";
+                  echo "<option value='$index' selected>$name | Kontonummer : $account</option>";
                 }else{
-                  echo "<option value='$index'>$name</option>";
+                  echo "<option value='$index'>$name | Kontonummer : $account</option>";
                 }
               }
               ?>
@@ -141,7 +144,7 @@ if(isset($_GET["action"])){
             <select name="konto" id="delAcount" onchange="check_selected()">
               <option value="">Välj ett konto...</option>
               <?php
-                foreach($_SESSION["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
+                foreach($lista["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
                   if($index == "allkonto"){
                     continue;
                   }
@@ -174,7 +177,7 @@ if(isset($_GET["action"])){
           <select name="fromKonto" id="fromKonto" required onchange="checkSelectedMulti()">
               <option value="">Välj ett konto...</option>
               <?php
-                foreach($_SESSION["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
+                foreach($lista["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
                   $name = ucfirst($index);
                   $balance = getBalance($index);
                   echo "<option value='$index'>$name: $balance kr</option>";
@@ -185,7 +188,7 @@ if(isset($_GET["action"])){
             <select name="toKonto" id="toKonto" required onchange="checkSelectedMulti()">
               <option value="">Välj ett konto...</option>
               <?php
-                foreach($_SESSION["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
+                foreach($lista["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
                   $name = ucfirst($index);
                   $balance = getBalance($index);
                   echo "<option value='$index'>$name: $balance kr</option>";
@@ -206,7 +209,7 @@ if(isset($_GET["action"])){
           <select name="fromKonto" id="fromKonto" required>
               <option value="">Välj ett konto...</option>
               <?php
-                foreach($_SESSION["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
+                foreach($lista["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
                   $name = ucfirst($index);
                   $balance = getBalance($index);
                   echo "<option value='$index'>$name: $balance kr</option>";
@@ -214,10 +217,8 @@ if(isset($_GET["action"])){
               ?>
             </select>
 
-            <label for="toUser">Till användaren</label>
-            <input type="text" id="toUser" name="toUser" placeholder="Användarnamnet" required>
-            <label for="toAccount">Till användarens konto</label>
-            <input type="text" id="toAccount" name="toUserAccount" placeholder="Konto namnet" required>
+            <label for="accountNumber">Användarens Kontonummer</label>
+            <input type="number" id="accountNumber" name="accountNumber" placeholder="Kontonummer" required>
 
             <label for="summa">Summa</label>
             <input type="number" name="amount" id="summa" placeholder="Summa" min="1" required>

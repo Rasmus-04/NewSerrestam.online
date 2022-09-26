@@ -15,16 +15,11 @@ function reload($path, $mess=""){
     exit();
 }
 
-function update_users(){
+function update_users($lista){
     # Updaterar json filen med vad jag har i sessionen
-    $t = array("users" => array());
-    foreach($_SESSION["users"] as $index => $u){
-        $t["users"][$index] = $u;
-    }
     $file_out = "users.json";
     $file = fopen($file_out, "w");
-
-    fwrite($file, json_encode($t, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+    fwrite($file, json_encode($lista, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     fclose($file);
 }
 
@@ -49,16 +44,39 @@ function validatePassword($pasw, $path="index.php"){
     }
 }
 
+function getJsonList(){
+    $file_in = "users.json";
+    return json_decode(file_get_contents($file_in), true);
+}
+
+function checkAccounNumber($accountNumber){
+    $list = getJsonList();
+    return isset($list["accounts"][$accountNumber]);
+}
+
+function generateAccountNummber(){
+    while(true){
+        $accountNumber = strval(rand(100000, 999999));
+        if(!checkAccounNumber($accountNumber)){
+            break;
+        }
+    }
+    return $accountNumber;
+
+}
+
 function createUser($username, $pasw){
     # Skapar användare först så validerar jag användere och lösenord sedan kollar jag om användare finns.
     $username = validateUsername($username);
     $pasw = validatePassword($pasw);
-
     if(isset($_SESSION["users"][$username])){
         reload("index.php", "userTaken");
     }else{
-        $_SESSION["users"][$username] = array("pasw" => $pasw, "accounts" => array("allkonto" => array(array("1000", date("Y-m-d H:i:s")))));
-        update_users();
+        $lista = getJsonList();
+        $accountNumber = strval(generateAccountNummber());
+        $lista["users"][$username] = array("pasw" => $pasw, "accounts" => array("allkonto" => $accountNumber));
+        $lista["accounts"][$accountNumber] = array(array("1000", date("Y-m-d H:i:s")));
+        update_users($lista);
         reload("index.php", "userCreated");
     }
 }
@@ -125,8 +143,8 @@ function bankMess(){
             case "transferSucces":
                 echo "<h4 style='color: green; text-align: center;'>Överförningen lyckades!</h4>";
                 break;
-            case "invalidUser":
-                echo "<h4 style='color: red; text-align: center;'>Användaren existerar inte</h4>";
+            case "invalidAccountNumber":
+                echo "<h4 style='color: red; text-align: center;'>Kontonummret existerar inte</h4>";
                 break;
             case "invalidAccount":
                 echo "<h4 style='color: red; text-align: center;'>Användaren har inget konto som heter det du angav</h4>";
@@ -139,7 +157,8 @@ function validateLogin($username, $pasw){
     # Kollar om inlogningsuppgifterna stämmer med ett konto och kollar också om användaren vill vara försätt inloggad då sparas det i en cookie
     $username = mb_strtolower($username);
     $pasw = sha1($pasw);
-    if(isset($_SESSION["users"][$username]) && $_SESSION["users"][$username]["pasw"] == $pasw){
+    $lista = getJsonList();
+    if(isset($lista["users"][$username]) && $lista["users"][$username]["pasw"] == $pasw){
         $_SESSION["activeUser"] = $username;
         if(isset($_POST["keepLoggedIn"])){
             setcookie("activeUser", $username, time()+(3600*24));
@@ -173,7 +192,7 @@ function logout(){
 function createUserFile(){
     # Skapar json filen med en tom users array
     $file_out = "users.json";
-    $t = array("users" => array());
+    $t = array("users" => array(), "accounts" => array());
     $file = fopen($file_out, "w");
     fwrite($file, json_encode($t, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     fclose($file);
@@ -183,8 +202,10 @@ function changePassword($oldPsw, $newPsw){
     # Ändrar lösenord
     $newPsw = validatePassword($newPsw, "bank.php");
     $oldPsw = sha1($oldPsw);
-    if($oldPsw == $_SESSION["users"][$_SESSION["activeUser"]]["pasw"]){
-        $_SESSION["users"][$_SESSION["activeUser"]]["pasw"] = $newPsw;
+    $lista = getJsonList();
+    if($oldPsw == $lista["users"][$_SESSION["activeUser"]]["pasw"]){
+        $lista["users"][$_SESSION["activeUser"]]["pasw"] = $newPsw;
+        update_users($lista);
         reload("bank.php", "paswChanged");
     }else{
         reload("bank.php", "wrongPasw");
@@ -194,11 +215,12 @@ function changePassword($oldPsw, $newPsw){
 function validateAccountName($account){
     # Validerar konto namn
     $account = mb_strtolower($account);
+    $lista = getJsonList();
     if(mb_strlen($account) < 3 || mb_strlen($account) > 9){
         return("lengthError");
     }elseif(str_contains($account, " ")){
         return("illegalCharacter");
-    }elseif(isset($_SESSION["users"][$_SESSION["activeUser"]]["accounts"][$account])){
+    }elseif(isset($lista["users"][$_SESSION["activeUser"]]["accounts"][$account])){
         return("acountExist");
     }else{
         return $account;
@@ -208,6 +230,7 @@ function validateAccountName($account){
 function createAccount($account){
     # Skapar ett konto till användaren
     $account = validateAccountName($account);
+    $lista = getJsonList();
     switch($account){
         case "lengthError":
             reload("bank.php", $account);
@@ -220,8 +243,10 @@ function createAccount($account){
             break;
         default:
             #Skapar konto
-            $_SESSION["users"][$_SESSION["activeUser"]]["accounts"][$account] = array();
-            update_users();
+            $accountNumber = generateAccountNummber();
+            $lista["users"][$_SESSION["activeUser"]]["accounts"][$account] = $accountNumber;
+            $lista["accounts"][$accountNumber] = array();
+            update_users($lista);
             reload("bank.php", "accountCreated");
             break;
     }
@@ -245,16 +270,20 @@ function accountCreationsError(){
     }
 }
 
-function deposit($amount, $account="allkonto", $redirect=true, $user=""){
+function deposit($amount, $account="allkonto", $redirect=true, $accountNumber=""){
     # Lägger in pengar på ditt konto
-    if($user == ""){
-        $user=$_SESSION["activeUser"];
+    $lista = getJsonList();
+    if($accountNumber == ""){
+        $user = $_SESSION["activeUser"];
+        $accountNumber = $lista["users"][$user]["accounts"][$account];
     }
+
     if($amount < 0){
         reload("bank.php", "ivalidAmount");
     }
-    $_SESSION["users"][$user]["accounts"][$account][] = array($amount, date("Y-m-d H:i:s"));
-    update_users();
+    
+    $lista["accounts"][$accountNumber][] = array($amount, date("Y-m-d H:i:s"));
+    update_users($lista);
     if($redirect){
         reload("bank.php");
     }
@@ -262,13 +291,15 @@ function deposit($amount, $account="allkonto", $redirect=true, $user=""){
 
 function withdrawal($amount, $account="allkonto", $redirect=true){
     # Tar ut pengar från kontot
+    $lista = getJsonList();
     if($amount < 0){
         reload("bank.php", "ivalidAmount");
     }elseif($amount > getBalance($account)){
         reload("bank.php", "notEnoughMoney");
     }
-    $_SESSION["users"][$_SESSION["activeUser"]]["accounts"][$account][] = array(-$amount, date("Y-m-d H:i:s"));
-    update_users();
+    $accountNumber = $lista["users"][$_SESSION["activeUser"]]["accounts"][$account];
+    $lista["accounts"][$accountNumber][] = array(strval(-$amount), date("Y-m-d H:i:s"));
+    update_users($lista);
     if($redirect){
         reload("bank.php");
     }
@@ -277,42 +308,43 @@ function withdrawal($amount, $account="allkonto", $redirect=true){
 
 function deleteAccount(){
     # Tar bort användare
-    unset($_SESSION["users"][$_SESSION["activeUser"]]);
+    $lista = getJsonList();
+    foreach($lista["users"][$_SESSION["activeUser"]]["accounts"] as $acc){
+        unset($lista["accounts"][$acc]);
+    }
+    unset($lista["users"][$_SESSION["activeUser"]]);
     unset($_SESSION["activeAccount"]);
-    update_users();
+    update_users($lista);
     logout();
 }
 
 function removeAccount($account){
     # Tar bort ett konto från användaren
+    $lista = getJsonList();
     if($account == "allkonto"){
         reload("bank.php");
     }
     if(intval(getBalance($account)) != 0){
         reload("bank.php", "emtyAccount");
     }
-    unset($_SESSION["users"][$_SESSION["activeUser"]]["accounts"][$account]);
+
+    $accountNumber = $lista["users"][$_SESSION["activeUser"]]["accounts"][$account];
+    unset($lista["accounts"][$accountNumber]);
+    unset($lista["users"][$_SESSION["activeUser"]]["accounts"][$account]);    
     if($_SESSION["activeAccount"] == $account){
         unset($_SESSION["activeAccount"]);
     }
-    update_users();
+    update_users($lista);
     reload("bank.php");
-}
-
-function get_users(){
-    # Hämtar datan från json filen och läser in det i Session
-    $file_in = "users.json";
-    if(!file_exists($file_in)){
-        createUserFile();
-    }
-    $users = json_decode(file_get_contents($file_in), true);
-    $_SESSION["users"] = $users["users"];
 }
 
 function getBalance($account="allkonto"){
     # returnar kontonts saldo
+    $lista = getJsonList();
+
     $balance = 0;
-    foreach($_SESSION["users"][$_SESSION["activeUser"]]["accounts"][$account] as $transaction){
+    $accountNumber = $lista["users"][$_SESSION["activeUser"]]["accounts"][$account];
+    foreach($lista["accounts"][$accountNumber] as $transaction){
         $balance += intval($transaction[0]);
     }
     return $balance;
@@ -324,7 +356,10 @@ function getTransactionTable($account="allkonto"){
     $i = 1;
     $balance = 0;
 
-    foreach($_SESSION["users"][$_SESSION["activeUser"]]["accounts"][$account] as $transaction){
+    $lista = getJsonList();
+    $accountNumber = $lista["users"][$_SESSION["activeUser"]]["accounts"][$account];
+
+    foreach($lista["accounts"][$accountNumber] as $transaction){
         $balance += $transaction[0];
         $output .= "\n<tr><td>".$i++."</td><td>{$transaction[0]}</td><td>{$transaction[1]}</td><td>$balance</td></tr>";
     }
@@ -343,27 +378,25 @@ function transfer($fromAccount, $toAccount, $ammount){
     }else{
         withdrawal($ammount, $fromAccount, false);
         deposit($ammount, $toAccount, false);
-        update_users();
         reload("bank.php", "transferSucces");
     }   
 }
 
-function transferBetweenUsers($fromAccount, $toAccount, $toUser, $ammount){
+function transferBetweenUsers($fromAccount, $accountNumber, $ammount){
     # Överför pengar från ditt konto till någon annans användares konto
-    $toAccount = mb_strtolower(trim($toAccount));
-    $toUser = mb_strtolower(trim($toUser));
-    echo $toUser;
+
+    $lista = getJsonList();
+
     if(getBalance($fromAccount) < $ammount){
         reload("bank.php", "notEnoughMoney");
     }elseif($ammount < 0){
         reload("bank.php", "invalidAmmount");
-    }elseif(!isset($_SESSION["users"][$toUser])){
-        reload("bank.php", "invalidUser");
-    }elseif(!isset($_SESSION["users"][$toUser]["accounts"][$toAccount])){
-        reload("bank.php", "invalidAccount");
+    }elseif(!isset($lista["accounts"][$accountNumber])){
+        reload("bank.php", "invalidAccountNumber");
     }else{
         withdrawal($ammount, $fromAccount, false);
-        deposit($ammount, $toAccount, false, $toUser);
+        deposit($ammount, $fromAccount, false, $accountNumber);
+        
         reload("bank.php", "transferSucces");
     }
 }
