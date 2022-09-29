@@ -79,9 +79,9 @@ if(isset($_GET["action"])){
         <form action="bankmanager.php" method="post">
             <h2>Logga in</h2>
             <?php loginMsg();?>
-            <input type="text" placeholder="Användarnamn" name="user" required />
+            <input type="text" placeholder="Användarnamn" name="user" required>
             <br>
-            <input type="password" placeholder="Lösenord" name="password" required />
+            <input type="password" placeholder="Lösenord" name="password" required>
             <br>
             <label class="form-checkbox">
                 <input type="checkbox" name="keepLoggedIn"> Håll mig inloggad (Använder cookies!)</label>
@@ -93,9 +93,9 @@ if(isset($_GET["action"])){
     <form action="bankmanager.php" method="post">
           <h2>Registrera konto</h2>
           <?php regMsg();?>
-          <input type="text" placeholder="Användarnamn" name="user" maxlength="9" minlength="3" oninvalid="this.setCustomValidity('Du måste ange ett användarnamn')" oninput="this.setCustomValidity('')" required />
-          <input type="password" name="password" id="password" placeholder="Lösenord" minlength="3" oninvalid="this.setCustomValidity('Du måste ange ett lösenord med minst 3 bokstäver')" oninput="this.setCustomValidity('')" required />
-          <input type="password" name="confirm_password" id="confirm_password" placeholder="Upprepa lösenord" oninvalid="this.setCustomValidity('Du måste upprepa ditt lösenord')" oninput="this.setCustomValidity('')" required />
+          <input type="text" placeholder="Användarnamn" name="user" maxlength="9" minlength="3" oninvalid="this.setCustomValidity('Du måste ange ett användarnamn')" oninput="this.setCustomValidity('')" required>
+          <input type="password" name="password" id="password" placeholder="Lösenord" minlength="3" oninvalid="this.setCustomValidity('Du måste ange ett lösenord med minst 3 bokstäver')" oninput="this.setCustomValidity('')" required>
+          <input type="password" name="confirm_password" id="confirm_password" placeholder="Upprepa lösenord" oninvalid="this.setCustomValidity('Du måste upprepa ditt lösenord')" oninput="this.setCustomValidity('')" required>
           <input type="submit" name="action" value="registrera">
     </form>
     </section>

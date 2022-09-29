@@ -16,7 +16,6 @@ function reload($path, $mess=""){
 }
 
 function update_users($lista){
-    # Updaterar json filen med vad jag har i sessionen
     $file_out = "users.json";
     $file = fopen($file_out, "w");
     fwrite($file, json_encode($lista, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
@@ -45,16 +44,19 @@ function validatePassword($pasw, $path="index.php"){
 }
 
 function getJsonList(){
+    # hätar datan från json filen och returnar den som en lista
     $file_in = "users.json";
     return json_decode(file_get_contents($file_in), true);
 }
 
 function checkAccounNumber($accountNumber){
+    # Kollar om konto nummret finns
     $list = getJsonList();
     return isset($list["accounts"][$accountNumber]);
 }
 
 function generateAccountNummber(){
+    # genererar ett konto nummer och returnar det
     while(true){
         $accountNumber = strval(rand(100000, 999999));
         if(!checkAccounNumber($accountNumber)){
@@ -69,7 +71,8 @@ function createUser($username, $pasw){
     # Skapar användare först så validerar jag användere och lösenord sedan kollar jag om användare finns.
     $username = validateUsername($username);
     $pasw = validatePassword($pasw);
-    if(isset($_SESSION["users"][$username])){
+    $f = getJsonList();
+    if(isset($f["users"][$username])){
         reload("index.php", "userTaken");
     }else{
         $lista = getJsonList();

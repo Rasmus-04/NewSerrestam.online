@@ -87,9 +87,9 @@ if(isset($_GET["action"])){
 
     <article class="container">
       <section>
-        <form action="">
+        <form action="?">
             <h3>Välj konto</h3>
-            <select name="" id="accountSelect" onchange="selectAccount()">
+            <select id="accountSelect" onchange="selectAccount()">
               <?php
               foreach($lista["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
                 $name = ucfirst($index);
@@ -120,7 +120,7 @@ if(isset($_GET["action"])){
 
         <form action="bankmanager.php" method="POST">
         <label for="belopp">Belopp:</label>
-        <input type="number" name="amount" min="1" required>
+        <input type="number" id="belopp" name="amount" min="1" pattern="\d*" required>
 
         <label for="deposit"><input type="radio" id="deposit" name="action" value="deposit" checked> Insättning</label>
         <label for="withdrawal"><input type="radio" id="withdrawal" name="action" value="withdrawal"> Uttag</label>
@@ -162,8 +162,8 @@ if(isset($_GET["action"])){
           <h3>Byt Lösenord</h3>
           <input type="Password" placeholder="Current Password" name="oldpsw" required>
 
-          <input type="password" name="password" id="password" placeholder="New password" minlength="3" required />
-          <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password" required />
+          <input type="password" name="password" id="password" placeholder="New password" minlength="3" required>
+          <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password" required>
 
           <input type="submit" name="action" value="Change Password">
         </form>
@@ -173,8 +173,8 @@ if(isset($_GET["action"])){
         <form action="bankmanager.php" method="POST">
           <h3>Överför mellan konton</h3>
 
-          <label for="fromKonto">Från konto</label>
-          <select name="fromKonto" id="fromKonto" required onchange="checkSelectedMulti()">
+          <label for="fromAccount">Från konto</label>
+          <select name="fromKonto" id="fromAccount" required onchange="checkSelectedMulti()">
               <option value="">Välj ett konto...</option>
               <?php
                 foreach($lista["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
@@ -195,8 +195,8 @@ if(isset($_GET["action"])){
                 }
               ?>
             </select>
-            <label for="summa">Summa</label>
-            <input type="number" name="amount" id="summa" placeholder="Summa" min="1" onchange="checkSelectedMulti()" required>
+            <label for="summa1">Summa</label>
+            <input type="number" name="amount" id="summa1" placeholder="Summa" min="1" pattern="\d*" onchange="checkSelectedMulti()" required>
             <input type="hidden" name="action" value="transfer">
           <input type="submit" value="Överför" id="transfer" disabled>
         </form>
@@ -218,10 +218,10 @@ if(isset($_GET["action"])){
             </select>
 
             <label for="accountNumber">Användarens Kontonummer</label>
-            <input type="number" id="accountNumber" name="accountNumber" placeholder="Kontonummer" required>
+            <input type="number" id="accountNumber" name="accountNumber" pattern="\d*" placeholder="Kontonummer" required>
 
             <label for="summa">Summa</label>
-            <input type="number" name="amount" id="summa" placeholder="Summa" min="1" required>
+            <input type="number" name="amount" id="summa" placeholder="Summa" min="1" pattern="\d*" required>
 
             <input type="hidden" name="action" value="transferBetweenUsers">
             <input type="submit" value="Överför">

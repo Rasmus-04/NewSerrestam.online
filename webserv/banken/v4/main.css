@@ -30,11 +30,13 @@ max-height: 500px;
 overflow: scroll;
 background-color: rgb(212, 212, 212);
 margin-bottom: 2rem;
+max-width: 35vw;
 }
 
 table{
     border-collapse: collapse;
     margin-bottom: 0;
+    overflow: scroll;
 }
 
 th{
@@ -66,4 +68,8 @@ tr:nth-child(odd){
     main{
         width: 100%;
     }
+
+    #trasactionList{
+        max-width: 100%;
+        }
 }
