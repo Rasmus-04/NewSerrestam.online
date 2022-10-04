@@ -2,6 +2,7 @@
 session_start();
 
 function clearSession(){
+    # Tömmer hela sessionen
     session_unset();
     session_destroy();
 }
@@ -16,6 +17,7 @@ function reload($path, $mess=""){
 }
 
 function update_users($lista){
+    # Updaterar json filen med den nya listan som sickas in som en parameter
     $file_out = "users.json";
     $file = fopen($file_out, "w");
     fwrite($file, json_encode($lista, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
@@ -23,22 +25,26 @@ function update_users($lista){
 }
 
 function validateUsername($username){
-    # Kollar om användarnamnet har minst 3 bokstäver och som mest 9 bokstäver
+    # Sätter användarnamnet till bara småbokstäver
     $username = mb_strtolower($username);
+    # Kollar om användarnamnet har minst 3 bokstäver och som mest 9 bokstäver
     if(mb_strlen($username) < 3 || mb_strlen($username) > 9){
         reload("index.php", "lengthError");
+    # Kollar så att användarnamnet inte innehåller mellanslag
     }elseif(str_contains($username, " ")){
         reload("index.php", "illegalCharacter");
     }else{
+        # Returnerar användarnamnet
         return $username;
     }
 }
 
 function validatePassword($pasw, $path="index.php"){
-    # Kollar om lösenordert är minst 3 bokstäver och returnar en krypterad variant
+    # Kollar om lösenordert är minst 3 bokstäver
     if(mb_strlen($pasw) < 3){
         reload($path, "paswLengthError");
     }else{
+        # Krypterar lösenordert och returnerar det
         return sha1($pasw);
     }
 }
@@ -56,35 +62,43 @@ function checkAccounNumber($accountNumber){
 }
 
 function generateAccountNummber(){
-    # genererar ett konto nummer och returnar det
+    # genererar ett konto nummer
     while(true){
         $accountNumber = strval(rand(100000, 999999));
+        # Kollar om konto nummret inte redan finns och då breakar ur loopen
         if(!checkAccounNumber($accountNumber)){
             break;
         }
     }
+    # Returnar konto nummret
     return $accountNumber;
 
 }
 
 function createUser($username, $pasw){
     # Skapar användare först så validerar jag användere och lösenord sedan kollar jag om användare finns.
+    # Validerar Användarnamn och lösenord
     $username = validateUsername($username);
     $pasw = validatePassword($pasw);
-    $f = getJsonList();
-    if(isset($f["users"][$username])){
+    $lista = getJsonList();
+    # Kollar om användarnamnet redan finns
+    if(isset($lista["users"][$username])){
         reload("index.php", "userTaken");
     }else{
-        $lista = getJsonList();
+        # Om användarnamnet inte finns så genereras ett konto nummer till ditt allkonto
         $accountNumber = strval(generateAccountNummber());
+        # användaren och allkontot läggs till i users listan
         $lista["users"][$username] = array("pasw" => $pasw, "accounts" => array("allkonto" => $accountNumber));
+        # Kontot läggs till i accounts listan
         $lista["accounts"][$accountNumber] = array(array("1000", date("Y-m-d H:i:s")));
+        # Jsong filen updateras
         update_users($lista);
         reload("index.php", "userCreated");
     }
 }
 
 function regMsg(){
+    # Regristations medelananden
     if(isset($_GET["mess"])){
         switch($_GET["mess"]){
             case "userTaken":
@@ -107,6 +121,7 @@ function regMsg(){
 }
 
 function loginMsg(){
+    # Login medalanden
     if(isset($_GET["mess"])){
         switch($_GET["mess"]){
             case "wrongUserOrPasw":
@@ -120,6 +135,7 @@ function loginMsg(){
 }
 
 function bankMess(){
+    # Bank medelanden
     if(isset($_GET["mess"])){
         switch($_GET["mess"]){
             case "ivalidAmount":
@@ -157,12 +173,14 @@ function bankMess(){
 }
 
 function validateLogin($username, $pasw){
-    # Kollar om inlogningsuppgifterna stämmer med ett konto och kollar också om användaren vill vara försätt inloggad då sparas det i en cookie
+    # Sätter användarnamnet till småbokstäver och krypterar lösenordet
     $username = mb_strtolower($username);
     $pasw = sha1($pasw);
     $lista = getJsonList();
+    # Kollar om användarnmnet finns och om lösenorden matchar
     if(isset($lista["users"][$username]) && $lista["users"][$username]["pasw"] == $pasw){
         $_SESSION["activeUser"] = $username;
+        # Kollar om användaren vill varakvar inloggad och då sparas användarnamnet i din cookie
         if(isset($_POST["keepLoggedIn"])){
             setcookie("activeUser", $username, time()+(3600*24));
         }
@@ -188,7 +206,6 @@ function logout(){
     if(isset($_COOKIE["activeUser"])){
       setcookie('activeUser', "", time()-3600);
     }
-
     reload("index.php");
 }
 
@@ -202,10 +219,11 @@ function createUserFile(){
 }
 
 function changePassword($oldPsw, $newPsw){
-    # Ändrar lösenord
+    # Validerar ditt nya lösenord och krypterar ditt gamla
     $newPsw = validatePassword($newPsw, "bank.php");
     $oldPsw = sha1($oldPsw);
     $lista = getJsonList();
+    # Kolla så lösenordet du gav matchar det gammla och om det gör så updateras ditt lösenord
     if($oldPsw == $lista["users"][$_SESSION["activeUser"]]["pasw"]){
         $lista["users"][$_SESSION["activeUser"]]["pasw"] = $newPsw;
         update_users($lista);
@@ -387,7 +405,6 @@ function transfer($fromAccount, $toAccount, $ammount){
 
 function transferBetweenUsers($fromAccount, $accountNumber, $ammount){
     # Överför pengar från ditt konto till någon annans användares konto
-
     $lista = getJsonList();
 
     if(getBalance($fromAccount) < $ammount){

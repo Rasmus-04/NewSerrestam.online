@@ -1,11 +1,13 @@
 <?php
 include("functions.php");
 
+# kollar om det finns en cookie och om det finns så loggas användaren in.
 if(isset($_COOKIE["activeUser"])){
     setcookie("activeUser", $_COOKIE["activeUser"], time()+(3600*24));
     $_SESSION["activeUser"] = $_COOKIE["activeUser"];
 }
 
+# Om man är inloggad så blir man sickat till banken
 if(isset($_SESSION["activeUser"])){
     reload("bank.php");
 }

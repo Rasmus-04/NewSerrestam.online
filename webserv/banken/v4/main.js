@@ -23,7 +23,7 @@ function check_selected() {
 }
 
 function checkSelectedMulti(){
-  var selector = document.getElementById('fromKonto');
+  var selector = document.getElementById('fromAccount');
   var value = selector[selector.selectedIndex].value;
 
   var selector2 = document.getElementById('toKonto');

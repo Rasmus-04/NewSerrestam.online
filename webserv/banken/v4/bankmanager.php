@@ -1,6 +1,7 @@
 <?php
 include("functions.php");
 
+# Kollar vad användaren vill göra
 if(isset($_POST["action"])){
 switch($_POST["action"]){
     case "registrera":

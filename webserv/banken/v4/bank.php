@@ -1,19 +1,26 @@
 <?php
 include("functions.php");
+# Kollar så att användaren är inloggad
 validateAccess();
+
+# Hämtar datan jag behöver för att kunna vissa alla konton
 $lista = getJsonList();
 
+# Kollar om ett konto är valt anars så defualtar den till allkonto
 if(!isset($_SESSION["activeAccount"])){
   $_SESSION["activeAccount"] = "allkonto";
 }
 
+# Kollar om användaren vill byta aktivt konto
 if(isset($_GET["updateActiveAccount"])){
+  # Kollar så att kontot användaren vill byta till finns
   if(isset($lista["users"][$_SESSION["activeUser"]]["accounts"][$_GET["updateActiveAccount"]])){
     $_SESSION["activeAccount"] = $_GET["updateActiveAccount"];
   }
   reload("bank.php");
 }
 
+# Kollar om användaren vill ta bort sitt konto eller logga ut
 if(isset($_GET["action"])){
     switch($_GET["action"]){
         case "Logga ut":
@@ -50,49 +57,49 @@ if(isset($_GET["action"])){
 
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Rasmus Serrestam - Banken</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarText">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="../../webserv.html">Gå tillbaka</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../v1/index.php">Version 01</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../v2/index.php">Version 02</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../v3/index.php">Version 03</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Version 04</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="source.php">CSource</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
+  <a class="navbar-brand" href="#">Rasmus Serrestam - Banken</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="../../webserv.html">Gå tillbaka</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="../v1/index.php">Version 01</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="../v2/index.php">Version 02</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="../v3/index.php">Version 03</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Version 04</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="source.php">CSource</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
 <main>
-    <h1>Sveriges mest säkraste bank</h1>
+    <h1>Sveriges säkraste bank</h1>
     <h2>Du är inloggad som <?php echo ucfirst($_SESSION["activeUser"])?></h2>
     <?php bankMess() ?>
     <hr>
-
-
     <article class="container">
       <section>
         <form action="?">
             <h3>Välj konto</h3>
             <select id="accountSelect" onchange="selectAccount()">
               <?php
+              # Går igenom alla konton användaren har och lägger dom i en select
               foreach($lista["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
                 $name = ucfirst($index);
+                # Sätter ditt aktiva konto som pre selected
                 if($index == $_SESSION["activeAccount"]){
                   echo "<option value='$index' selected>$name | Kontonummer : $account</option>";
                 }else{
@@ -120,7 +127,7 @@ if(isset($_GET["action"])){
 
         <form action="bankmanager.php" method="POST">
         <label for="belopp">Belopp:</label>
-        <input type="number" id="belopp" name="amount" min="1" pattern="\d*" required>
+        <input type="number" id="belopp" name="amount" min="1" max="9999999999999999999999999999999" pattern="\d*" required>
 
         <label for="deposit"><input type="radio" id="deposit" name="action" value="deposit" checked> Insättning</label>
         <label for="withdrawal"><input type="radio" id="withdrawal" name="action" value="withdrawal"> Uttag</label>
@@ -137,13 +144,13 @@ if(isset($_GET["action"])){
         </div>
     </section>
 
-
       <section>
         <form action="bankmanager.php" method="POST">
             <h3>Ta bort konto</h3>
             <select name="konto" id="delAcount" onchange="check_selected()">
               <option value="">Välj ett konto...</option>
               <?php
+              # Går igenom alla konton användaren har och lägger dom i en select
                 foreach($lista["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
                   if($index == "allkonto"){
                     continue;
@@ -177,6 +184,7 @@ if(isset($_GET["action"])){
           <select name="fromKonto" id="fromAccount" required onchange="checkSelectedMulti()">
               <option value="">Välj ett konto...</option>
               <?php
+              # Går igenom alla konton användaren har och lägger dom i en select
                 foreach($lista["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
                   $name = ucfirst($index);
                   $balance = getBalance($index);
@@ -188,6 +196,7 @@ if(isset($_GET["action"])){
             <select name="toKonto" id="toKonto" required onchange="checkSelectedMulti()">
               <option value="">Välj ett konto...</option>
               <?php
+              # Går igenom alla konton användaren har och lägger dom i en select
                 foreach($lista["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
                   $name = ucfirst($index);
                   $balance = getBalance($index);
@@ -209,6 +218,7 @@ if(isset($_GET["action"])){
           <select name="fromKonto" id="fromKonto" required>
               <option value="">Välj ett konto...</option>
               <?php
+              # Går igenom alla konton användaren har och lägger dom i en select
                 foreach($lista["users"][$_SESSION["activeUser"]]["accounts"] as $index => $account){
                   $name = ucfirst($index);
                   $balance = getBalance($index);
