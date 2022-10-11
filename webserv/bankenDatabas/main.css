@@ -1,0 +1,77 @@
+main{
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 4rem;
+  }
+ 
+.container{
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+justify-content: space-evenly;
+grid-column-gap: 10vw;
+grid-row-gap: 10px;
+}
+
+.container section{
+    display: block;
+    margin: 20px auto;
+    width: 100%;
+    height: fit-content;
+    min-height: fit-content;
+    padding: 10px;
+}
+
+h1, h2{
+    text-align: center;
+}
+
+#trasactionList{
+max-height: 500px;
+overflow: scroll;
+background-color: rgb(212, 212, 212);
+margin-bottom: 2rem;
+max-width: 35vw;
+}
+
+table{
+    border-collapse: collapse;
+    margin-bottom: 0;
+    overflow: scroll;
+}
+
+th{
+    background: rgb(70, 70, 85);
+    color: rgb(237, 223, 239);
+    padding: 10px;
+    height: 1.5rem;
+    position: sticky;
+    top: 0;
+}
+
+td{
+    padding: 5px, 10px;
+    border: 1px rgb(148, 149, 139) solid;
+    min-width: 4rem;
+}
+
+tr:nth-child(odd){
+    background: rgb(183, 182, 193);
+}
+
+
+@media (max-width: 931px) {
+    .container{
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .container section{
+    min-width: 100%;
+    }
+
+    main{
+        width: 100%;
+    }
+
+    #trasactionList{
+        max-width: 100%;
+        }
+}
