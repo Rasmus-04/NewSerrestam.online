@@ -23,12 +23,12 @@ function validateUsername($username){
     $username = mb_strtolower($username);
     # Kollar om användarnamnet har minst 3 bokstäver och som mest 9 bokstäver
     if(mb_strlen($username) < 3 || mb_strlen($username) > 9){
-        reload("index.php", "lengthError");
+        reload("index.php", "lengthError#regMsg");
     # Kollar så att användarnamnet inte innehåller mellanslag
     }elseif(str_contains($username, " ")){
-        reload("index.php", "illegalCharacter");
+        reload("index.php", "illegalCharacter#regMsg");
     }elseif(!ctype_alnum($username)){
-        reload("index.php", "illigleChar");
+        reload("index.php", "illigleChar#regMsg");
     }else{
         # Returnerar användarnamnet
         return $username;
@@ -38,9 +38,9 @@ function validateUsername($username){
 function validatePassword($pasw, $path="index.php"){
     # Kollar om lösenordert är minst 3 bokstäver
     if(mb_strlen($pasw) < 3){
-        reload($path, "paswLengthError");
+        reload($path, "paswLengthError#regMsg");
     }elseif(!ctype_alnum($pasw)){
-        reload("index.php", "illigleChar");
+        reload("index.php", "illigleChar#regMsg");
     }else{
         # Krypterar lösenordert och returnerar det
         return sha1($pasw);
@@ -139,7 +139,7 @@ function createUser($username, $pasw){
     $userTaken = checkUserNameExist($username);
 
     if($userTaken){
-        reload("index.php", "userTaken");
+        reload("index.php", "userTaken#regMsg");
     }else{
         $accountNumber = intval(generateAccountNummber());
         $sql = "INSERT INTO users (user, pasw, locked) VALUES ('$username', '$pasw', 0);";
@@ -147,7 +147,7 @@ function createUser($username, $pasw){
         $sql .= " INSERT INTO transactions (amount, accountNumber) VALUES (1000, $accountNumber);";
         $stm = $pdo->prepare($sql);
         $stm->execute();
-        reload("index.php", "userCreated");
+        reload("index.php", "userCreated#regMsg");
     }
 }
 
@@ -240,7 +240,7 @@ function validateLogin($username, $pasw){
         $password = getDatabaseData("pasw", "users", "user = '$username'");
         if($pasw == $password[0]["pasw"]){
             if(getDatabaseData("locked", "users", "user = '$username'")[0]["locked"] == 1){
-                reload("index.php", "accessDenied");
+                reload("index.php", "accessDenied#logIn");
             }
             $_SESSION["activeUser"] = $username;
             $time = date("Y-m-d H:i:s");
@@ -252,7 +252,7 @@ function validateLogin($username, $pasw){
             reload("bank.php");
         }
     }
-    reload("index.php", "wrongUserOrPasw");
+    reload("index.php", "wrongUserOrPasw#logIn");
 }
 
 function validateAccess(){
@@ -267,7 +267,7 @@ function validateAccess(){
     elseif(isset($_SESSION["activeUser"])){
         return;
     }else{
-        reload("index.php", "accessDenied");
+        reload("index.php", "accessDenied#logIn");
     }
 }
 
@@ -337,21 +337,21 @@ function createAccount($account){
     $account = validateAccountName($account);
     switch($account){
         case "lengthError":
-            reload("bank.php", $account);
+            reload("bank.php", "$account#accountCreation");
             break;
         case "illegalCharacter":
-            reload("bank.php", $account);
+            reload("bank.php", "$account#accountCreation");
             break;
         case "acountExist":
-            reload("bank.php", $account);
+            reload("bank.php", "$account#accountCreation");
             break;
         case "illigleChar":
-            reload("bank.php", $account);
+            reload("bank.php", "$account#accountCreation");
         default:
             #Skapar konto
             $accountNumber = generateAccountNummber();
             sendDatabaseData("accounts", "accountNumber, accountName, user", "$accountNumber, '$account', '{$_SESSION['activeUser']}'");
-            reload("bank.php", "accountCreated");
+            reload("bank.php", "accountCreated#accountCreation");
             break;
     }
 }
@@ -385,7 +385,7 @@ function deposit($amount, $accountNumber, $redirect=true){
     sendDatabaseData("transactions", "amount, accountNumber", "$amount, $accountNumber");
 
     if($redirect){
-        reload("bank.php");
+        reload("bank.php#saldo");
     }
 }
 
@@ -400,7 +400,7 @@ function withdrawal($amount, $accountNumber, $redirect=true){
     $amount = -$amount;
     sendDatabaseData("transactions", "amount, accountNumber", "$amount, $accountNumber");
     if($redirect){
-        reload("bank.php");
+        reload("bank.php#saldo");
     }
 }
 
@@ -452,14 +452,14 @@ function getBalance($accountnumber){
 function getTransactionTable($accountNumber){
     # returnar tablen för alla transaktioner
     $output = "<table><thead><tr><th>Nr</th><th>Belopp</th><th>Datum</th><th>Saldo</th></tr></thead><tbody>";
-    $balance = 0;
+    $balance = intval(getBalance($accountNumber));
 
     $transactions = array_reverse(getDatabaseData("amount, time", "transactions", "accountNumber = $accountNumber"));
     $i = sizeof($transactions);
 
     foreach($transactions as $transaction){
-        $balance += $transaction["amount"];
         $output .= "\n<tr><td>".$i--."</td><td>{$transaction["amount"]}</td><td>{$transaction["time"]}</td><td>$balance</td></tr>";
+        $balance -= $transaction["amount"];
     }
     $output .= "</tbody></table>";
     return $output;

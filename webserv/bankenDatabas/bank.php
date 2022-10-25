@@ -5,7 +5,7 @@ validateAccess();
 $accounts = getDatabaseData("*", "accounts", "user = '{$_SESSION['activeUser']}'");
 
 # Kollar om ett konto är valt anars så defualtar den till allkonto
-if(!isset($_SESSION["activeAccount"])){
+if(!isset($_SESSION["activeAccount"]) || !checkAccountNameExist($_SESSION["activeAccount"])){
   $_SESSION["activeAccount"] = "allkonto";
 }
 
@@ -61,11 +61,8 @@ $lastLogedIn = getDatabaseData("lastLogedIn", "users", "user = '{$_SESSION["acti
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-
   <link rel="stylesheet" href="../css/milligram.css">
-
-    <link rel="stylesheet" href="main.css">
-
+  <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
@@ -118,7 +115,7 @@ $lastLogedIn = getDatabaseData("lastLogedIn", "users", "user = '{$_SESSION["acti
       </section>
 
       <section>
-        <form action="bankmanager.php" method="POST">
+        <form action="bankmanager.php" method="POST" id="accountCreation">
           <h3>Skapa Nytt konto</h3>
           <?php accountCreationsError();?>
           <input type="text" name="kontonamn" placeholder="Konto namn" pattern="[^()/><\][\\\x22,;|]+" minlength="3" maxlength="9" required>
@@ -127,7 +124,7 @@ $lastLogedIn = getDatabaseData("lastLogedIn", "users", "user = '{$_SESSION["acti
       </section>
 
     <section>
-        <h3><b>Saldo</b></h3>
+        <h3 id="saldo"><b>Saldo</b></h3>
         <p><?php echo getBalance($_SESSION["activeAccountNumber"])?> kr</p>
         <h3><b>Insättning/uttag</b></h3>
 
@@ -171,7 +168,7 @@ $lastLogedIn = getDatabaseData("lastLogedIn", "users", "user = '{$_SESSION["acti
       </section>
 
       <section>
-        <form action="bankmanager.php" method="POST" id="test">
+        <form action="bankmanager.php" method="POST">
           <h3>Byt Lösenord</h3>
           <input type="Password" placeholder="Current Password" name="oldpsw" required>
 

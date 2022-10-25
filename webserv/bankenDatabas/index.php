@@ -70,7 +70,7 @@ if(isset($_GET["action"])){
     <h1>Sveriges mest säkraste bank</h1>
   <div class="container">
     <section>
-        <form action="bankmanager.php" method="post">
+        <form action="bankmanager.php" method="post" id="logIn">
             <h2>Logga in</h2>
             <?php loginMsg();?>
             <input type="text" placeholder="Användarnamn" name="user" required>
@@ -84,7 +84,7 @@ if(isset($_GET["action"])){
     </section>
 
     <section>
-    <form action="bankmanager.php" method="post">
+    <form action="bankmanager.php" method="post" id="regMsg">
           <h2>Registrera konto</h2>
           <?php regMsg();?>
           <input type="text" placeholder="Användarnamn" name="user" maxlength="9" minlength="3" oninvalid="this.setCustomValidity('Du måste ange ett användarnamn')" oninput="this.setCustomValidity('')" required>
@@ -94,10 +94,7 @@ if(isset($_GET["action"])){
     </form>
     </section>
   </div>
-
-
-
-  <p>Döda sessionen om du har en från någon annan version eller annat projekt <a href="?action=killsession">Kill session</a></p>
+  <p style="margin-left: 2rem;">Döda sessionen om du har en från någon annan version eller annat projekt <a href="?action=killsession">Kill session</a></p>
 </main>
 <script src="main.js"></script>
 </body>
